@@ -2,8 +2,16 @@ from rest_framework import generics, status
 from rest_framework.response import Response
 from rest_framework.views import APIView
 from django.shortcuts import get_object_or_404
-from .models import Playlists, Addition
-from .serializers import PlaylistSerializer, AdditionSerializer
+from .models import *
+from .serializers import *
+from rest_framework.pagination import PageNumberPagination
+
+
+class CustomPagination(PageNumberPagination):
+    page_size = 10  # Número de itens por página
+    page_size_query_param = 'page_size'
+    max_page_size = 1000  # Número máximo de itens por página
+
 
 class PlaylistListCreate(generics.ListCreateAPIView):
     queryset = Playlists.objects.all()
@@ -11,6 +19,15 @@ class PlaylistListCreate(generics.ListCreateAPIView):
 
     def perform_create(self, serializer):
         serializer.save(user=self.request.user)
+        
+    def post(self, request, *args, **kwargs):
+        serializer = self.get_serializer(data=request.data)
+        serializer.is_valid(raise_exception=True)
+        self.perform_create(serializer)
+        return Response(status=status.HTTP_201_CREATED)    
+
+    def get(self, request, *args, **kwargs):
+        return Response()
 
 class PlaylistRetrieveUpdateDestroy(generics.RetrieveUpdateDestroyAPIView):
     queryset = Playlists.objects.all()
@@ -41,12 +58,125 @@ class ViewPlaylist(APIView):
 
 
 class ListAllPlaylists(APIView):
+    pagination_class = CustomPagination  # Adicionando paginação à visualização
+
     def get(self, request):
-        # Obtém todas as playlists do banco de dados
         playlists = Playlists.objects.all()
-        
-        # Serializa as playlists
-        serializer = PlaylistSerializer(playlists, many=True)
-        
-        # Retorna a resposta com a lista de playlists
+        paginator = self.pagination_class()
+        result_page = paginator.paginate_queryset(playlists, request)
+        serializer = PlaylistSerializer(result_page, many=True)
+        return paginator.get_paginated_response(serializer.data)
+    
+    
+#artistas
+class ArtistListCreate(generics.ListCreateAPIView):
+    queryset = Artist.objects.all()
+    serializer_class = ArtistSerializer
+    
+    def post(self, request, *args, **kwargs):
+        serializer = self.get_serializer(data=request.data)
+        serializer.is_valid(raise_exception=True)
+        self.perform_create(serializer)
+        return Response(status=status.HTTP_201_CREATED)    
+
+    def get(self, request, *args, **kwargs):
+        return Response()
+
+
+class ArtistRetrieveUpdateDestroy(generics.RetrieveUpdateDestroyAPIView):
+    queryset = Artist.objects.all()
+    serializer_class = ArtistSerializer
+
+
+class ViewArtist(APIView):
+    def get(self, request, artist_id):
+        artist = get_object_or_404(Artist, artist_id=artist_id)
+        serializer = ArtistSerializer(artist)
         return Response(serializer.data)
+    
+
+class ListAllArtists(APIView):
+    pagination_class = CustomPagination  # Adicionando paginação à visualização
+
+    def get(self, request):
+        artists = Artist.objects.all()
+        paginator = self.pagination_class()
+        result_page = paginator.paginate_queryset(artists, request)
+        serializer = ArtistSerializer(result_page, many=True)
+        return paginator.get_paginated_response(serializer.data)
+
+  
+#albums
+class AlbumListCreate(generics.ListCreateAPIView):
+    queryset = Album.objects.all()
+    serializer_class = AlbumSerializer
+
+    def post(self, request, *args, **kwargs):
+        serializer = self.get_serializer(data=request.data)
+        serializer.is_valid(raise_exception=True)
+        self.perform_create(serializer)
+        return Response(status=status.HTTP_201_CREATED)    
+
+    def get(self, request, *args, **kwargs):
+        return Response()
+
+
+class AlbumRetrieveUpdateDestroy(generics.RetrieveUpdateDestroyAPIView):
+    queryset = Album.objects.all()
+    serializer_class = AlbumSerializer
+    
+
+class ViewAlbum(APIView):
+    def get(self, request, album_id):
+        album = get_object_or_404(Album, album_id=album_id)
+        serializer = AlbumSerializer(album)
+        return Response(serializer.data)
+
+
+class ListAllAlbums(APIView):
+    pagination_class = CustomPagination  # Adicionando paginação à visualização
+
+    def get(self, request):
+        albums = Album.objects.all()
+        paginator = self.pagination_class()
+        result_page = paginator.paginate_queryset(albums, request)
+        serializer = AlbumSerializer(result_page, many=True)
+        return paginator.get_paginated_response(serializer.data)
+
+    
+#musicas
+class SongListCreate(generics.ListCreateAPIView):
+    queryset = Song.objects.all()
+    serializer_class = SongSerializer
+    
+    def post(self, request, *args, **kwargs):
+        serializer = self.get_serializer(data=request.data)
+        serializer.is_valid(raise_exception=True)
+        self.perform_create(serializer)
+        return Response(status=status.HTTP_201_CREATED)    
+
+    def get(self, request, *args, **kwargs):
+        return Response()
+
+
+class SongRetrieveUpdateDestroy(generics.RetrieveUpdateDestroyAPIView):
+    queryset = Song.objects.all()
+    serializer_class = SongSerializer
+
+
+class ViewSong(APIView):
+    def get(self, request, song_id):
+        song = get_object_or_404(Song, song_id=song_id)
+        serializer = SongSerializer(song)
+        return Response(serializer.data)
+  
+    
+class ListAllSongs(APIView):
+    pagination_class = CustomPagination  # Adicionando paginação à visualização
+
+    def get(self, request):
+        songs = Song.objects.all()
+        paginator = self.pagination_class()
+        result_page = paginator.paginate_queryset(songs, request)
+        serializer = SongSerializer(result_page, many=True)
+        return paginator.get_paginated_response(serializer.data)
