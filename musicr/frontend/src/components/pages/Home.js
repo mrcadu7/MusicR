@@ -1,7 +1,11 @@
+import SearchArtistForm from "../forms/SearchArtistForm";
+import Main from "../content/Main";
+
 function Home () {
         return (
             <div>
-                <h1>Home</h1>
+                <SearchArtistForm/>
+                <Main/>
             </div>
         );
     }

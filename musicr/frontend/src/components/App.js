@@ -1,17 +1,25 @@
 import React from 'react';
+import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
 import { createRoot } from 'react-dom/client';
 import Home from './pages/Home';
+import Navbar from './layout/Navbar';
+import Footer from './layout/Footer';
+import Container from './layout/Container';
 
 
 function App() {
-    return (
-      <div>
-        <h1>
-            <Home/>
-        </h1>
-      </div>
-    );
-  }
+  return (
+    <Router>
+      <Navbar/>
+      <Container customClass="min-height">
+        <Routes>
+          <Route path="/" element={<Home/>} />
+        </Routes>
+      </Container>
+      <Footer/>
+    </Router>
+  );
+}
 
 const appDiv = document.getElementById("app");
 const root = createRoot(appDiv);

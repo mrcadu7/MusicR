@@ -1,0 +1,34 @@
+/* Navbar.module.css */
+
+.navbar {
+    background-color: #6B2C91;
+    padding: 1em;
+}
+
+.name {
+    color: #000000;
+    font-weight: bold;
+    font-size: 5em; /* Reduzi o tamanho da fonte para evitar que o nome ocupe muito espaço */
+}
+
+.list {
+    list-style: none;
+    margin: 0; /* Removendo margens padrão */
+    padding: 0; /* Removendo preenchimento padrão */
+}
+
+.item {
+    margin-right: 1em;
+    padding: 0.5em;
+}
+
+.item a {
+    color: #F5E5FF;
+    font-weight: bold;
+    text-decoration: none;
+}
+
+.item a:hover {
+    color: #000000;
+    text-decoration: none;
+}

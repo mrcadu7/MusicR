@@ -1,0 +1,49 @@
+/* Footer.module.css */
+
+.footer {
+  background-color: #6B2C91;
+  color: #000000;
+  padding: 3em;
+  text-align: center;
+  position: bottom;
+  bottom: 0;
+  width: 100%;
+}
+
+.social_list {
+  display: flex;
+  justify-content: center;
+  list-style-type: none;
+  padding: 0;
+}
+
+.social_list li {
+  margin: 0 1em;
+}
+
+.social_list a:hover {
+  color: #000000;
+}
+
+.social_list a:visited {
+  color: #F5E5FF;
+}
+
+.social_list svg {
+  font-size: 1.5em;
+  cursor: pointer;
+  color: #F5E5FF;
+}
+
+.social_list svg:hover {
+  color: #000000;
+}
+
+.copy_right {
+  margin-top: 2em;
+}
+
+.copy_right span {
+  font-weight: bold;
+  color: #000000;
+}
