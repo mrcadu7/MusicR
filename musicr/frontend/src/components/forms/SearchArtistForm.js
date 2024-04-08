@@ -2,11 +2,12 @@ import { useState } from 'react';
 import axios from 'axios';
 import SubmitButton from './SubmitButton'; // Importe o componente SubmitButton
 
-function SearchArtistForm() {
+function SearchArtistForm({ onSubmit }) {
     const [searchQuery, setSearchQuery] = useState('');
     const [searchResults, setSearchResults] = useState([]);
     const [selectedArtistId, setSelectedArtistId] = useState(null); // Adicione o estado para armazenar o ID do artista selecionado
-
+    const [selectedArtistName, setSelectedArtistName] = useState('');
+    
     const handleSearch = async (event) => {
         const query = event.target.value;
         setSearchQuery(query);
@@ -24,6 +25,7 @@ function SearchArtistForm() {
         setSelectedArtistId(artistId); // Atualize o estado com o ID do artista selecionado
         setSearchResults([]); // Limpar sugestões após seleção
         console.log('Selected artist:', { name: artistName, id: artistId });
+        setSelectedArtistName(artistName);
     };
 
     const handleSubmit = () => {
@@ -32,7 +34,7 @@ function SearchArtistForm() {
             // Faça a requisição para obter informações do artista
             axios.get(`/spotify/get-artist-info/${selectedArtistId}/`)
                 .then(response => {
-                    // Faça algo com os dados do artista, se necessário
+                    onSubmit({ ...response.data, name: selectedArtistName });
                     console.log('Artist info:', response.data);
                 })
                 .catch(error => {

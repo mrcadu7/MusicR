@@ -1,11 +1,11 @@
 import ParentComponent from "./ParentComponent";
 import ArtistHeader from "./ArtistHeader";
 
-function Main () {
+function Main ({ artistInfo }) {
         return (
             <div>
-                <ArtistHeader/>
-                <ParentComponent/>
+                <ArtistHeader artist={artistInfo}/>
+                <ParentComponent albums={artistInfo.albums}/>
             </div>
         );
     }

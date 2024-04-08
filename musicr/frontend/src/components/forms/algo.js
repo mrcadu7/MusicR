@@ -1,61 +1,32 @@
-import React, { useState } from 'react';
-import axios from 'axios';
-import SubmitButton from './SubmitButton';
+import React from 'react';
 
-function SearchArtistForm({ onRequestArtistInfo }) {
-    const [searchQuery, setSearchQuery] = useState('');
-    const [searchResults, setSearchResults] = useState([]);
-    const [selectedArtistId, setSelectedArtistId] = useState(null);
-
-    const handleSearch = async (event) => {
-        const query = event.target.value;
-        setSearchQuery(query);
-
-        try {
-            const response = await axios.get(`/api/search-artists/${query}/`);
-            setSearchResults(response.data);
-        } catch (error) {
-            console.error('Error fetching search results:', error);
-        }
-    };
-
-    const handleSelectArtist = (artistName, artistId) => {
-        setSearchQuery(artistName);
-        setSelectedArtistId(artistId);
-        setSearchResults([]);
-        console.log('Selected artist:', { name: artistName, id: artistId });
-    };
-
-    const handleSubmit = async () => {
-        try {
-            const response = await axios.get(`/api/get-artist-info/${selectedArtistId}/`);
-            onRequestArtistInfo(response.data); // Passa as informações do artista para a função onRequestArtistInfo
-        } catch (error) {
-            console.error('Error fetching artist info:', error);
-        }
-    };
+function MusicModal({ isOpen, onClose, album }) {
+    if (!isOpen) return null;
 
     return (
-        <div className="mb-3">
-            <input
-                type="text"
-                className="form-control"
-                placeholder="Search for artists..."
-                value={searchQuery}
-                onChange={handleSearch}
-            />
-            {searchResults.length > 0 && (
-                <ul>
-                    {searchResults.map(artist => (
-                        <li key={artist.id} onClick={() => handleSelectArtist(artist.name, artist.id)} style={{ cursor: 'pointer' }}>
-                            {artist.name}
-                        </li>
-                    ))}
-                </ul>
-            )}
-            <SubmitButton onClick={handleSubmit} />
+        <div className="modal" tabIndex="-1" role="dialog" style={{ display: 'block', backgroundColor: 'rgba(0, 0, 0, 0.5)' }}>
+            <div className="modal-dialog" role="document">
+                <div className="modal-content">
+                    <div className="modal-header">
+                        <h5 className="modal-title">{album.name} - Músicas</h5>
+                        <button type="button" className="close" onClick={onClose} aria-label="Close">
+                            <span aria-hidden="true">&times;</span>
+                        </button>
+                    </div>
+                    <div className="modal-body">
+                        <ul>
+                            {album.tracks.map((track, index) => (
+                                <li key={index}>{track.name}</li>
+                            ))}
+                        </ul>
+                    </div>
+                    <div className="modal-footer">
+                        <button type="button" className="btn btn-secondary" onClick={onClose}>Fechar</button>
+                    </div>
+                </div>
+            </div>
         </div>
     );
 }
 
-export default SearchArtistForm;
+export default MusicModal;

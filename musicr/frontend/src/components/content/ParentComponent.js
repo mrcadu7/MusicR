@@ -2,10 +2,12 @@ import { useState } from 'react';
 import AlbumCard from './AlbumCard';
 import MusicModal from './MusicModal';
 
-function ParentComponent() {
+function ParentComponent({albums}) {
     const [isModalOpen, setIsModalOpen] = useState(false);
+    const [selectedAlbum, setSelectedAlbum] = useState(null);
 
-    const openModal = () => {
+    const openModal = (album) => {
+        setSelectedAlbum(album);
         setIsModalOpen(true);
     };
 
@@ -15,8 +17,10 @@ function ParentComponent() {
 
     return (
         <div>
-            <AlbumCard openModal={openModal} />
-            <MusicModal isOpen={isModalOpen} onClose={closeModal} album="{/* passar o objeto do álbum aqui */}" />
+            {albums.map(album => (
+                <AlbumCard key={album.album_id} album={album} openModal={() => openModal(album)} />
+            ))}
+            <MusicModal isOpen={isModalOpen} onClose={closeModal} album={selectedAlbum} />
         </div>
     );
 }
