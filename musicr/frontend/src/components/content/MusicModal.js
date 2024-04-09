@@ -14,19 +14,22 @@ function MusicModal({ isOpen, onClose, album, playlists }) {
 
     return (
         <div className={styles.modal} tabIndex="-1" role="dialog" >
-            <div className="modal-dialog" role="document">
-                <div className="modal-content">
-                    <div className="modal-header">
-                        <h5 className="modal-title">{album.name} - Músicas</h5>
+            <div className={styles['modal-dialog']} role="document">
+                <div className={styles['modal-content']}>
+                    <div className={styles['modal-header']}>
+                        <h5 className='modal-title'>{album.name} - Músicas</h5>
                         <button type="button" className="close" onClick={onClose} aria-label="Close">
                             <span aria-hidden="true">&times;</span>
                         </button>
                     </div>
-                    <div className="modal-body">
-                        <PlaylistSelectForm playlists={playlists} onSelect={handlePlaylistSelect} />
-                        <ul>
+                    <div className={styles['modal-body']}>
+                        <ul className={styles['music-ul']}>
                             {album.tracks.map((track, index) => (
-                                <li key={index}>{track.name}</li>
+                                <li className={styles['music-li']} key={index}>
+                                    <span>{track.name}</span>
+                                    <PlaylistSelectForm playlists={playlists} onSelect={handlePlaylistSelect} />
+                                    <button onClick={() => handleAddToPlaylist(track)}>Adicionar</button>
+                                </li>
                             ))}
                         </ul>
                     </div>
