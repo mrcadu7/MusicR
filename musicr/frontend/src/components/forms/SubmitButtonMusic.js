@@ -2,7 +2,7 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 
-function SubmitButtonMusic({ trackId, onClick }) {
+function SubmitButtonMusic({ track, onClick }) {
     return (
         <div className="d-grid gap-2 col-6 mx-auto">
             <button className="btn btn-primary" onClick={onClick}>
@@ -13,7 +13,7 @@ function SubmitButtonMusic({ trackId, onClick }) {
 }
 
 SubmitButtonMusic.propTypes = {
-    trackId: PropTypes.string.isRequired,
+    track: PropTypes.object.isRequired,
     onClick: PropTypes.func.isRequired,
 };
 

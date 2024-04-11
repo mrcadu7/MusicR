@@ -48,6 +48,7 @@ class GetArtistInfo(APIView):
             for album in albums['items']:
                 album_info = {
                     "name": album['name'],
+                    "artist_id": artist['id'],
                     "album_id": album['id'],
                     "release_date": parse_release_date(album['release_date']),
                     "image_url": album['images'][0]['url'] if album['images'] else None,
@@ -60,10 +61,13 @@ class GetArtistInfo(APIView):
                     duration = track['duration_ms']
                     track_info = {
                         "name": track['name'],
+                        "artist_id": artist['id'],
+                        "album_id": album['id'],
                         "track_id": track['id'],
                         "duration": duration,
+                        "release_date": parse_release_date(album['release_date']),
                         "album_name": album['name'],  
-                        "artist_name": artist['name'],  
+                        "artist_name": artist['name'],
                     }
                     album_info["tracks"].append(track_info)
 
