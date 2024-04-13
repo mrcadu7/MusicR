@@ -24,15 +24,15 @@ async function addToDb({ songId, artistId, artistName, albumId, albumName, album
             song_id: songId
         };
 
-        const [songResponse, albumResponse, artistResponse] = await Promise.all([
-            fetch(`/playlists/songs/view/${songId}/`),
-            fetch(`/playlists/albums/view/${albumId}/`),
-            fetch(`/playlists/artists/view/${artistId}/`)
+        const [songExists, albumExists, artistExists] = await Promise.all([
+            fetch(`/playlists/songs/exists/${songId}/`).then(res => res.json()).then(data => data.exists),
+            fetch(`/playlists/albums/exists/${albumId}/`).then(res => res.json()).then(data => data.exists),
+            fetch(`/playlists/artists/exists/${artistId}/`).then(res => res.json()).then(data => data.exists)
         ]);
 
-        if (!songResponse.ok) {
-            if (!albumResponse.ok) {
-                if (!artistResponse.ok) {
+        if (!songExists) {
+            if (!albumExists) {
+                if (!artistExists) {
                     await fetchAndHandleError(`/playlists/artists/create/`, artistRequestBody);
                 }
                 await fetchAndHandleError(`/playlists/albums/create/`, albumRequestBody);

@@ -105,6 +105,12 @@ class ListAllArtists(APIView):
         serializer = ArtistSerializer(result_page, many=True)
         return paginator.get_paginated_response(serializer.data)
 
+
+class ArtistExists(APIView):
+    def get(self, request, artist_id):
+        exists = Artist.objects.filter(artist_id=artist_id).exists()
+        return Response({'exists': exists})
+
   
 #albums
 class AlbumListCreate(generics.ListCreateAPIView):
@@ -143,6 +149,12 @@ class ListAllAlbums(APIView):
         serializer = AlbumSerializer(result_page, many=True)
         return paginator.get_paginated_response(serializer.data)
 
+
+class AlbumExists(APIView):
+    def get(self, request, album_id):
+        exists = Album.objects.filter(album_id=album_id).exists()
+        return Response({'exists': exists})
+
     
 #musicas
 class SongListCreate(generics.ListCreateAPIView):
@@ -180,3 +192,9 @@ class ListAllSongs(APIView):
         result_page = paginator.paginate_queryset(songs, request)
         serializer = SongSerializer(result_page, many=True)
         return paginator.get_paginated_response(serializer.data)
+    
+
+class SongExists(APIView):
+    def get(self, request, song_id):
+        exists = Song.objects.filter(song_id=song_id).exists()
+        return Response({'exists': exists})
