@@ -7,6 +7,19 @@ import addToDb from '../../../utils/addToDb';
 
 var csrftoken = getCookie('csrftoken');
 
+
+async function songInPlaylistExists(songId, playlistId) {
+    const response = await fetch(`/playlists/playlists/view/${playlistId}/`);
+    if (response.ok) {
+        const playlist = await response.json();
+        return playlist.songs.includes(songId);
+    } else {
+        console.error('Erro ao buscar playlist:', response.statusText);
+        return false;
+    }
+}
+
+
 function MusicModal({ isOpen, onClose, album, playlists }) {
     const [selectedPlaylist, setSelectedPlaylist] = useState('');
 
@@ -15,10 +28,19 @@ function MusicModal({ isOpen, onClose, album, playlists }) {
     };
 
     // Função para adicionar a música à playlist selecionada
-    const handleAddToPlaylist = (track) => {
+    const handleAddToPlaylist = async (track) => {
         console.log('Playlist selecionada:', selectedPlaylist);
         console.log('Música selecionada:', track.track_id);
         if (selectedPlaylist && track) {
+
+            const songExists = await songInPlaylistExists(track.track_id, selectedPlaylist);
+            if (songExists) {
+                const shouldAdd = window.confirm('Essa música já existe na playlist. Você gostaria de adicioná-la mesmo assim?');
+                if (!shouldAdd) {
+                    return;
+                }
+            }
+
             // Chama a função addToDb para adicionar os dados ao banco de dados, se necessário
             addToDb({
                 songId: track.track_id,
