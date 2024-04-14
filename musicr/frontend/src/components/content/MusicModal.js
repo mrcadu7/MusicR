@@ -1,5 +1,5 @@
-import { useState } from 'react';
-import PlaylistSelectForm from '../forms/PlaylistSelectForm';
+import { useState, useEffect } from 'react';
+
 import styles from './musicmodal.module.css';
 import SubmitButtonMusic from '../forms/SubmitButtonMusic';
 import getCookie from '../../../utils/csfr';
@@ -22,9 +22,27 @@ async function songInPlaylistExists(songId, playlistId) {
 
 function MusicModal({ isOpen, onClose, album, playlists }) {
     const [selectedPlaylist, setSelectedPlaylist] = useState('');
+    const [trackToAdd, setTrackToAdd] = useState({ key: 0, track: null });
 
-    const handlePlaylistSelect = (event) => {
-        setSelectedPlaylist(event.target.value);
+    useEffect(() => {
+        if (trackToAdd.track) {
+            const addSongToPlaylist = async () => {
+                const songExists = await songInPlaylistExists(trackToAdd.track.track_id, selectedPlaylist);
+                if (songExists) {
+                    const shouldAdd = window.confirm('Essa música já existe na playlist. Você gostaria de adicioná-la mesmo assim?');
+                    if (!shouldAdd) {
+                        return;
+                    }
+                }
+                handleAddToPlaylist(trackToAdd.track);
+            };
+            addSongToPlaylist();
+        }
+    }, [selectedPlaylist, trackToAdd]);
+
+    const handlePlaylistSelect = (playlistId, track) => {
+        setSelectedPlaylist(playlistId);
+        setTrackToAdd(prevState => ({ key: prevState.key + 1, track }));
     };
 
     // Função para adicionar a música à playlist selecionada
@@ -32,14 +50,6 @@ function MusicModal({ isOpen, onClose, album, playlists }) {
         console.log('Playlist selecionada:', selectedPlaylist);
         console.log('Música selecionada:', track.track_id);
         if (selectedPlaylist && track) {
-
-            const songExists = await songInPlaylistExists(track.track_id, selectedPlaylist);
-            if (songExists) {
-                const shouldAdd = window.confirm('Essa música já existe na playlist. Você gostaria de adicioná-la mesmo assim?');
-                if (!shouldAdd) {
-                    return;
-                }
-            }
 
             // Chama a função addToDb para adicionar os dados ao banco de dados, se necessário
             addToDb({
@@ -102,8 +112,7 @@ function MusicModal({ isOpen, onClose, album, playlists }) {
                             {album.tracks.map((track, index) => (
                                 <li className={styles['music-li']} key={index}>
                                     <span>{track.name}</span>
-                                    <PlaylistSelectForm playlists={playlists} onSelect={handlePlaylistSelect} />
-                                    <SubmitButtonMusic track={track} onClick={() => handleAddToPlaylist(track)} />
+                                    <SubmitButtonMusic track={track} playlists={playlists} onSelect={handlePlaylistSelect} />
                                 </li>
                             ))}
                         </ul>

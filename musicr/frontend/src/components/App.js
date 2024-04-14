@@ -2,6 +2,7 @@ import React from 'react';
 import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
 import { createRoot } from 'react-dom/client';
 import Home from './pages/Home';
+import Playlists from './pages/Playlists';
 import Navbar from './layout/Navbar';
 import Footer from './layout/Footer';
 import Container from './layout/Container';
@@ -14,6 +15,7 @@ function App() {
       <Container customClass="min-height">
         <Routes>
           <Route path="/" element={<Home/>} />
+          <Route path="/playlist" element={<Playlists/>} />
         </Routes>
       </Container>
       <Footer/>

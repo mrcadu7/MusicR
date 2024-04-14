@@ -3,7 +3,7 @@ from django.db import models
 
 class Artist(models.Model):
     name = models.CharField(max_length=100)
-    artist_id = models.CharField(max_length=100, primary_key=True)
+    artist_id = models.CharField(max_length=50, primary_key=True)
     
     def __str__(self):
         return self.name
@@ -11,9 +11,9 @@ class Artist(models.Model):
 
 class Album(models.Model):
     artist = models.ForeignKey(Artist, on_delete=models.CASCADE)
-    title = models.CharField(max_length=100)
+    title = models.CharField(max_length=900)
     release_date = models.DateField()
-    album_id = models.CharField(max_length=100, primary_key=True)
+    album_id = models.CharField(max_length=50, primary_key=True)
     
     def __str__(self):
         return self.title
@@ -22,9 +22,9 @@ class Album(models.Model):
 class Song(models.Model):
     artist = models.ForeignKey(Artist, on_delete=models.CASCADE)
     album = models.ForeignKey(Album, on_delete=models.CASCADE)
-    title = models.CharField(max_length=100)
+    title = models.CharField(max_length=300)
     duration = models.DurationField()
-    song_id = models.CharField(max_length=100, primary_key=True)
+    song_id = models.CharField(max_length=50, primary_key=True)
     
     def __str__(self):
         return self.title

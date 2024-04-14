@@ -32,10 +32,14 @@ function ParentComponent({albums}) {
     };
 
     return (
-        <div>
-            {albums.map(album => (
-                <AlbumCard key={album.album_id} album={album} openModal={() => openModal(album)} />
-            ))}
+        <div className="container">
+            <div className="row">
+                {albums.map(album => (
+                    <div key={album.album_id} className="col-md-3" style={{ marginBottom: '20px' }}>
+                        <AlbumCard album={album} openModal={() => openModal(album)} />
+                    </div>
+                ))}
+            </div>
             <MusicModal isOpen={isModalOpen} onClose={closeModal} album={selectedAlbum} playlists={playlists} />
         </div>
     );
