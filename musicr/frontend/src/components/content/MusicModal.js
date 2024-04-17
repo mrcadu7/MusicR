@@ -12,7 +12,7 @@ async function songInPlaylistExists(songId, playlistId) {
     const response = await fetch(`/playlists/playlists/view/${playlistId}/`);
     if (response.ok) {
         const playlist = await response.json();
-        return playlist.songs.includes(songId);
+        return playlist.song_details.some(song => song.song_id === songId);
     } else {
         console.error('Erro ao buscar playlist:', response.statusText);
         return false;

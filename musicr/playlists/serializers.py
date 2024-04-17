@@ -1,12 +1,6 @@
 from rest_framework import serializers
 from .models import *
 
-class PlaylistSerializer(serializers.ModelSerializer):
-    class Meta:
-        model = Playlists
-        fields = ['id', 'user', 'title', 'description', 'created_at', 'updated_at', 'image_url', 'songs']
-
-
 class AdditionSerializer(serializers.ModelSerializer):
     class Meta:
         model = Addition
@@ -26,6 +20,16 @@ class AlbumSerializer(serializers.ModelSerializer):
   
         
 class SongSerializer(serializers.ModelSerializer):
+    artist = ArtistSerializer()
+    album = AlbumSerializer()
+    
     class Meta:
         model = Song
         fields = ['song_id', 'artist', 'album', 'title', 'duration']
+        
+        
+class PlaylistSerializer(serializers.ModelSerializer):
+    song_details = SongSerializer(source='songs', many=True, read_only=True)
+    class Meta:
+        model = Playlists
+        fields = ['id', 'user', 'title', 'description', 'created_at', 'updated_at', 'image_url', 'song_details']

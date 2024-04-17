@@ -64,7 +64,7 @@ class GetArtistInfo(APIView):
                         "artist_id": artist['id'],
                         "album_id": album['id'],
                         "track_id": track['id'],
-                        "duration": duration,
+                        "duration": duration / 1000,
                         "release_date": parse_release_date(album['release_date']),
                         "album_name": album['name'],  
                         "artist_name": artist['name'],
