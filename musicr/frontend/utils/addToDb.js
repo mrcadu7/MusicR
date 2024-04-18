@@ -4,6 +4,7 @@ const csrftoken = getCookie('csrftoken');
 
 async function addToDb({ songId, artistId, artistName, albumId, albumName, albumReleaseDate, songTitle, songDuration }) {
     try {
+
         const artistRequestBody = {
             name: artistName,
             artist_id: artistId,
@@ -23,6 +24,18 @@ async function addToDb({ songId, artistId, artistName, albumId, albumName, album
             duration: songDuration,
             song_id: songId
         };
+
+        
+        console.log('Dados recebidos para adicionar ao banco de dados:', {
+            songId,
+            artistId,
+            artistName,
+            albumId,
+            albumName,
+            albumReleaseDate,
+            songTitle,
+            songDuration,
+        });
 
         const [songExists, albumExists, artistExists] = await Promise.all([
             fetch(`/playlists/songs/exists/${songId}/`).then(res => res.json()).then(data => data.exists),

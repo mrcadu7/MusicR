@@ -1,6 +1,7 @@
 import { useState, useEffect } from 'react';
 import { useParams } from 'react-router-dom';
 import axios from 'axios';
+import PlaylistTable from '../layout/PlaylistTable';
 import Container from '../layout/Container';
 
 function PlaylistDetailsPage() {
@@ -48,11 +49,7 @@ function PlaylistDetailsPage() {
                 <div>
                     <h1>{playlist.title}</h1>
                     <p>{playlist.description}</p>
-                    <ul>
-                        {playlist.song_details.map((song, index) => (
-                            <li key={index}>{song.title} - {song.artist.name} - {song.album.title} - {formatDuration(song.duration)}</li>
-                        ))}
-                    </ul>
+                    <PlaylistTable playlist={playlist} formatDuration={formatDuration} />
                 </div>
             )}
         </div>

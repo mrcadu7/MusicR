@@ -12,7 +12,7 @@ async function songInPlaylistExists(songId, playlistId) {
     const response = await fetch(`/playlists/playlists/view/${playlistId}/`);
     if (response.ok) {
         const playlist = await response.json();
-        return playlist.song_details.some(song => song.song_id === songId);
+        return playlist.song_details.some(song => song.song.song_id === songId);
     } else {
         console.error('Erro ao buscar playlist:', response.statusText);
         return false;
@@ -51,6 +51,17 @@ function MusicModal({ isOpen, onClose, album, playlists }) {
         console.log('Música selecionada:', track.track_id);
         if (selectedPlaylist && track) {
 
+            console.log('Dados da música:', {
+                songId: track.track_id,
+                artistId: track.artist_id,
+                artistName: track.artist_name,
+                albumId: album.album_id,
+                albumName: album.name,
+                albumReleaseDate: album.release_date,
+                songTitle: track.name,
+                songDuration: track.duration,
+            });
+
             // Chama a função addToDb para adicionar os dados ao banco de dados, se necessário
             addToDb({
                 songId: track.track_id,
@@ -68,7 +79,7 @@ function MusicModal({ isOpen, onClose, album, playlists }) {
                     playlist: selectedPlaylist
                 };
                 
-                console.log(requestBody);
+                console.log('Dados a serem enviados na solicitação POST:', requestBody);
                 console.log(JSON.stringify(requestBody));
     
                 // Faça a solicitação POST para adicionar a música à playlist
