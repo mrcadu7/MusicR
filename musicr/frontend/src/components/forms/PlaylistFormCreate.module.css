@@ -1,0 +1,9 @@
+/* playlistFormStyles.module.css */
+
+.form-container {
+    width: 300px; /* Defina a largura desejada para o formulário */
+    max-width: 300px;
+    margin: 0 auto; /* Isso irá centralizar o formulário na tela */
+}
+
+/* Adicione estilos adicionais conforme necessário */

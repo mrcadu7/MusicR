@@ -4,6 +4,7 @@ import { createRoot } from 'react-dom/client';
 import Home from './pages/Home';
 import Playlists from './pages/Playlists';
 import PlaylistDetailsPage from './pages/PlaylistDetailsPage';
+import PlaylistCreate from './pages/PlaylistCreate';
 import Navbar from './layout/Navbar';
 import Footer from './layout/Footer';
 import Container from './layout/Container';
@@ -18,6 +19,7 @@ function App() {
           <Route path="/" element={<Home/>} />
           <Route path="/playlist" element={<Playlists/>} />
           <Route path="/playlist/:playlistId" element={<PlaylistDetailsPage />} />
+          <Route path="/playlist/create" element={<PlaylistCreate />} />
         </Routes>
       </Container>
       <Footer/>
