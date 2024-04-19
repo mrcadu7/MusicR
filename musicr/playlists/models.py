@@ -1,5 +1,5 @@
 from django.db import models
-
+from django.core.validators import MinValueValidator, MaxValueValidator
 
 class Artist(models.Model):
     name = models.CharField(max_length=100)
@@ -31,7 +31,7 @@ class Song(models.Model):
 
 
 class Playlists(models.Model):
-    user = models.ForeignKey('auth.User', on_delete=models.CASCADE, null=True)
+    user = models.ForeignKey('auth.User', on_delete=models.CASCADE)
     title = models.CharField(max_length=64)
     description = models.CharField(max_length=512, blank=True)
     created_at = models.DateTimeField(auto_now_add=True)
@@ -55,3 +55,12 @@ class Addition(models.Model):
         
     def __str__(self):
         return self.song.title
+    
+    
+class SongReview(models.Model):
+    user = models.ForeignKey('auth.User', on_delete=models.CASCADE)
+    song = models.ForeignKey(Song, on_delete=models.CASCADE)
+    rating = models.IntegerField(default=0, validators=[MinValueValidator(1), MaxValueValidator(10)])
+    comment = models.TextField(max_length=512, blank=True, null=True)
+    created_at = models.DateTimeField(auto_now_add=True)
+    updated_at = models.DateTimeField(auto_now=True)

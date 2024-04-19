@@ -57,3 +57,9 @@ class PlaylistSerializer(serializers.ModelSerializer):
             song_detail['added_at'] = song_detail['created_at']
             del song_detail['created_at']
         return representation
+    
+
+class SongReviewSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = SongReview
+        fields = '__all__'

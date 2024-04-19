@@ -1,3 +1,4 @@
+from django.forms import ValidationError
 from rest_framework import generics, status
 from rest_framework.response import Response
 from rest_framework.views import APIView
@@ -198,3 +199,39 @@ class SongExists(APIView):
     def get(self, request, song_id):
         exists = Song.objects.filter(song_id=song_id).exists()
         return Response({'exists': exists})
+    
+
+# reviews
+# songs
+
+class SongReviewListCreate(generics.ListCreateAPIView):
+    queryset = SongReview.objects.all()
+    serializer_class = SongReviewSerializer
+
+    def perform_create(self, serializer):
+        user = self.request.user
+        song = serializer.validated_data['song']
+
+        # Verifica se o usuário já deixou uma revisão para esta música
+        existing_review = SongReview.objects.filter(user=user, song=song).exists()
+        if existing_review:
+            raise ValidationError("O usuário já deixou uma revisão para esta música.")
+
+        # Se não houver revisão existente, salva a nova revisão
+        serializer.save(user=user)
+
+class SongReviewRetrieveUpdateDestroy(generics.RetrieveUpdateDestroyAPIView):
+    queryset = SongReview.objects.all()
+    serializer_class = SongReviewSerializer
+
+class ListSongReviewsBySong(APIView):
+    def get(self, request, song_id):
+        song_reviews = SongReview.objects.filter(song_id=song_id)
+        serializer = SongReviewSerializer(song_reviews, many=True)
+        return Response(serializer.data)
+
+class ListSongReviewsByUser(APIView):
+    def get(self, request, user_id):
+        song_reviews = SongReview.objects.filter(user_id=user_id)
+        serializer = SongReviewSerializer(song_reviews, many=True)
+        return Response(serializer.data)

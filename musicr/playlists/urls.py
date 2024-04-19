@@ -29,4 +29,10 @@ urlpatterns = [
     path('songs/update/<str:pk>/', SongRetrieveUpdateDestroy.as_view(), name='song_retrieve_update_destroy'),  # Recuperar, atualizar e deletar uma música específica
     path('songs/view/<str:song_id>/', ViewSong.as_view(), name='view_song'),  # Visualizar uma música específica
     path('songs/exists/<str:song_id>/', SongExists.as_view(), name='song_exists'), # Verificar se uma música existe no BD
+    
+    # Endpoints para song reviews
+    path('song-reviews/', SongReviewListCreate.as_view(), name='song_review_list_create'),  # Listar e criar avaliações de músicas
+    path('song-reviews/update/<int:pk>/', SongReviewRetrieveUpdateDestroy.as_view(), name='song_review_retrieve_update_destroy'),  # Recuperar, atualizar e deletar uma avaliação de música específica
+    path('song-reviews/by-song/<str:song_id>/', ListSongReviewsBySong.as_view(), name='list_song_reviews_by_song'),  # Listar avaliações de músicas por música específica
+    path('song-reviews/by-user/<int:user_id>/', ListSongReviewsByUser.as_view(), name='list_song_reviews_by_user'),  # Listar avaliações de músicas por usuário específico
 ]
