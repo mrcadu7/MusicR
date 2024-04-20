@@ -60,7 +60,7 @@ class Addition(models.Model):
 class SongReview(models.Model):
     user = models.ForeignKey('auth.User', on_delete=models.CASCADE)
     song = models.ForeignKey(Song, on_delete=models.CASCADE)
-    rating = models.IntegerField(default=0, validators=[MinValueValidator(1), MaxValueValidator(10)])
+    rating = models.FloatField(default=0, validators=[MinValueValidator(1), MaxValueValidator(5)])
     comment = models.TextField(max_length=512, blank=True, null=True)
     created_at = models.DateTimeField(auto_now_add=True)
     updated_at = models.DateTimeField(auto_now=True)

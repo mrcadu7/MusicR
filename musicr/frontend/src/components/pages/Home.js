@@ -2,6 +2,7 @@ import { useState } from 'react';
 import SearchArtistForm from "../forms/SearchArtistForm";
 import Main from "../content/Main";
 
+
 function Home () {
     const [artistInfo, setArtistInfo] = useState(null);
 

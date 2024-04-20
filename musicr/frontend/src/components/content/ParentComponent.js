@@ -33,7 +33,7 @@ function ParentComponent({albums}) {
 
     return (
         <div className="container">
-            <div className="row">
+            <div className="row" style={{ paddingLeft: '75px', paddingRight: '75px' }}>
                 {albums.map(album => (
                     <div key={album.album_id} className="col-md-3" style={{ marginBottom: '20px' }}>
                         <AlbumCard album={album} openModal={() => openModal(album)} />

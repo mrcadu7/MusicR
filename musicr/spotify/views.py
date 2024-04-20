@@ -39,6 +39,7 @@ class GetArtistInfo(APIView):
             artist_info = {
                 "name": artist['name'],
                 "id": artist['id'],
+                "genres": artist['genres'],
                 "image_url": artist['images'][0]['url'] if artist['images'] else None,
                 "albums": [],
             }

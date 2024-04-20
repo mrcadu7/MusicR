@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import { useState } from 'react';
 import PlaylistFormCreate from '../forms/PlaylistFormCreate';
 import getCookie from '../../../utils/csfr.js';
 
