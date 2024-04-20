@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import PlaylistFormCreate from '../forms/PlaylistFormCreate';
-import getCookie from '../../../utils/csrf';
+import getCookie from '../../../utils/csfr.js';
 
 var csrftoken = getCookie('csrftoken');
 
@@ -47,7 +47,7 @@ function PlaylistCreate() {
         <div className="container">
             <h1>Create Playlist</h1>
             {errorMessage && <ErrorMessage message={errorMessage} />}
-            <PlaylistForm onSubmit={handleSubmit} />
+            <PlaylistFormCreate onSubmit={handleSubmit} />
         </div>
     );
 }
