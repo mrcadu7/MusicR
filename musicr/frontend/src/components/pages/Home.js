@@ -1,6 +1,7 @@
 import { useState } from 'react';
 import SearchArtistForm from "../forms/SearchArtistForm";
 import Main from "../content/Main";
+import styles from "./Home.module.css";
 
 
 function Home () {
@@ -11,7 +12,7 @@ function Home () {
     };
 
     return (
-        <div>
+        <div className={styles.container_form}>
             <SearchArtistForm onSubmit={handleArtistInfo} />
             {artistInfo && <Main artistInfo={artistInfo} />}
         </div>

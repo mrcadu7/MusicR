@@ -1,12 +1,27 @@
-import { useState } from 'react';
+import { useState, useRef, useEffect } from 'react';
 import axios from 'axios';
-import SubmitButton from './SubmitButton'; // Importe o componente SubmitButton
+import SubmitButton from './SubmitButton';
+import styles from './SearchArtistForm.module.css';
 
 function SearchArtistForm({ onSubmit }) {
     const [searchQuery, setSearchQuery] = useState('');
     const [searchResults, setSearchResults] = useState([]);
-    const [selectedArtistId, setSelectedArtistId] = useState(null); // Adicione o estado para armazenar o ID do artista selecionado
+    const [selectedArtistId, setSelectedArtistId] = useState(null); 
     const [selectedArtistName, setSelectedArtistName] = useState('');
+    const formRef = useRef(null);
+
+    useEffect(() => {
+        const handleClickOutside = (event) => {
+            if (formRef.current && !formRef.current.contains(event.target)) {
+                setSearchResults([]);
+            }
+        };
+
+        document.addEventListener('mousedown', handleClickOutside);
+        return () => {
+            document.removeEventListener('mousedown', handleClickOutside);
+        };
+    }, []);
     
     const handleSearch = async (event) => {
         const query = event.target.value;
@@ -46,16 +61,16 @@ function SearchArtistForm({ onSubmit }) {
     };
 
     return (
-        <div className="mb-3">
+        <div ref={formRef} className={`mb-3 ${styles.formcontainer}`}>
             <input
                 type="text"
-                className="form-control"
+                className={`form-control ${styles.searchInput}`}
                 placeholder="Search for artists..."
                 value={searchQuery}
                 onChange={handleSearch}
             />
             {searchResults.length > 0 && (
-                <ul>
+                <ul className={`${styles.searchResults} ${searchResults.length > 4 ? styles.scrollable : ''}`}>
                     {searchResults.map(artist => (
                         <li key={artist.id} onClick={() => handleSelectArtist(artist.name, artist.id)} style={{ cursor: 'pointer' }}>
                             {artist.name}
@@ -63,7 +78,8 @@ function SearchArtistForm({ onSubmit }) {
                     ))}
                 </ul>
             )}
-            <SubmitButton onClick={handleSubmit} /> {/* Passar a função handleSubmit para o SubmitButton */}
+            <br /> {/* vou melhorar depois */}
+            <SubmitButton onClick={handleSubmit} />
         </div>
     );
 }

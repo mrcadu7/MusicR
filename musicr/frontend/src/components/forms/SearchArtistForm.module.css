@@ -1,0 +1,45 @@
+.formContainer {
+    width: 300px; /* Defina o tamanho fixo desejado */
+    margin: 0 auto; /* Centralize o formulário horizontalmente */
+  }
+  
+  .searchInput {
+    /* Sobrescrever estilos do Bootstrap para o input de pesquisa */
+    /* Por exemplo: */
+    border: 1px solid #ced4da;
+    border-radius: 0.25rem;
+    padding: 0.375rem 0.75rem;
+    width: 300px; /* Defina o tamanho fixo desejado */
+    
+  }
+  
+  .searchResults {
+    /* Estilos para a lista de resultados */
+    /* Por exemplo: */
+    list-style-type: none;
+    padding: 0;
+  }
+  
+  .searchResults li {
+    /* Estilos para cada item da lista de resultados */
+    /* Por exemplo: */
+    padding: 0.5rem;
+    cursor: pointer;
+    color: #000;
+    background-color: whitesmoke;
+    width: 300px; /* Defina o tamanho fixo desejado */
+    overflow: hidden; /* Adiciona overflow hidden para esconder texto que ultrapassa o limite */
+    white-space: nowrap; /* Evita que o texto quebre para a próxima linha */
+    text-overflow: ellipsis;
+  }
+  
+  .searchResults li:hover {
+    /* Estilos ao passar o mouse sobre um item da lista de resultados */
+    /* Por exemplo: */
+    background-color: #969696;
+  }
+
+  .scrollable {
+    max-height: 160px; /* Ajuste conforme necessário */
+    overflow-y: auto;
+  }

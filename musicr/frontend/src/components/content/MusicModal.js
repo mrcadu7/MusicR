@@ -114,13 +114,15 @@ function MusicModal({ isOpen, onClose, album, playlists }) {
             <div className={styles['modal-dialog']} role="document">
                 <div className={styles['modal-content']}>
                     <div className={styles['modal-header']}>
-                        <h5 className='modal-title' style={{ fontSize: '30px' }}>{album.name}</h5>
+                        <h5 className='modal-title' style={{ fontSize: '50px' }}>{album.name}</h5>
                     </div>
                     <div className={styles['modal-body']}>
                         <AlbumTable album={album} playlists={playlists} handlePlaylistSelect={handlePlaylistSelect} />
                     </div>
+                    <br />
+                    <br />
                     <div className="modal-footer">
-                        <button type="button" className="btn btn-secondary" onClick={onClose}>Fechar</button>
+                        <button type="button" className="btn btn-dark" onClick={onClose}>Fechar</button>
                     </div>
                 </div>
             </div>
