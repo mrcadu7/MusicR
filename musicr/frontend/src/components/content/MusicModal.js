@@ -4,6 +4,7 @@ import styles from './musicmodal.module.css';
 import SubmitButtonMusic from '../forms/SubmitButtonMusic';
 import getCookie from '../../../utils/csfr';
 import addToDb from '../../../utils/addToDb';
+import AlbumTable from '../layout/AlbumTable';
 
 var csrftoken = getCookie('csrftoken');
 
@@ -113,20 +114,10 @@ function MusicModal({ isOpen, onClose, album, playlists }) {
             <div className={styles['modal-dialog']} role="document">
                 <div className={styles['modal-content']}>
                     <div className={styles['modal-header']}>
-                        <h5 className='modal-title'>{album.name} - Músicas</h5>
-                        <button type="button" className="close" onClick={onClose} aria-label="Close">
-                            <span aria-hidden="true">&times;</span>
-                        </button>
+                        <h5 className='modal-title' style={{ fontSize: '30px' }}>{album.name}</h5>
                     </div>
                     <div className={styles['modal-body']}>
-                        <ul className={styles['music-ul']}>
-                            {album.tracks.map((track, index) => (
-                                <li className={styles['music-li']} key={index}>
-                                    <span>{track.name}</span>
-                                    <SubmitButtonMusic track={track} playlists={playlists} onSelect={handlePlaylistSelect} />
-                                </li>
-                            ))}
-                        </ul>
+                        <AlbumTable album={album} playlists={playlists} handlePlaylistSelect={handlePlaylistSelect} />
                     </div>
                     <div className="modal-footer">
                         <button type="button" className="btn btn-secondary" onClick={onClose}>Fechar</button>
