@@ -1,5 +1,6 @@
 from rest_framework import serializers
 from .models import *
+from django.db.models import Avg
 
 class AdditionSerializer(serializers.ModelSerializer):
     class Meta:
@@ -20,12 +21,16 @@ class AlbumSerializer(serializers.ModelSerializer):
   
         
 class SongSerializer(serializers.ModelSerializer):
-    # artist = ArtistSerializer()
-    # album = AlbumSerializer()
+    average_rating = serializers.SerializerMethodField()
     
     class Meta:
         model = Song
-        fields = ['song_id', 'artist', 'album', 'title', 'duration']
+        fields = ['song_id', 'artist', 'album', 'title', 'duration', 'average_rating']
+        
+    def get_average_rating(self, obj):
+        # Calcula a média das avaliações para a música
+        average_rating = SongReview.objects.filter(song=obj).aggregate(Avg('rating'))['rating__avg']
+        return average_rating
         
         
 class PlaylistSongSerializer(serializers.ModelSerializer):

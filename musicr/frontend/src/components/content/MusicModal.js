@@ -52,16 +52,6 @@ function MusicModal({ isOpen, onClose, album, playlists }) {
         console.log('Música selecionada:', track.track_id);
         if (selectedPlaylist && track) {
 
-            console.log('Dados da música:', {
-                songId: track.track_id,
-                artistId: track.artist_id,
-                artistName: track.artist_name,
-                albumId: album.album_id,
-                albumName: album.name,
-                albumReleaseDate: album.release_date,
-                songTitle: track.name,
-                songDuration: track.duration,
-            });
 
             // Chama a função addToDb para adicionar os dados ao banco de dados, se necessário
             addToDb({
@@ -79,11 +69,8 @@ function MusicModal({ isOpen, onClose, album, playlists }) {
                     song: track.track_id,
                     playlist: selectedPlaylist
                 };
-                
-                console.log('Dados a serem enviados na solicitação POST:', requestBody);
-                console.log(JSON.stringify(requestBody));
     
-                // Faça a solicitação POST para adicionar a música à playlist
+                // POST
                 fetch(`/playlists/playlists/add-song/${selectedPlaylist}/`, {
                     method: 'POST',
                     headers: {

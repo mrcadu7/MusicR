@@ -17,6 +17,9 @@ function PlaylistCreate() {
 
     const handleSubmit = async ({ title, description }) => {
         try {
+
+            console.log({ title, description, image_url: '' });
+
             const response = await fetch('/playlists/playlists/create/', {
                 method: 'POST',
                 headers: {
@@ -24,9 +27,9 @@ function PlaylistCreate() {
                     'X-CSRFToken': csrftoken
                 },
                 body: JSON.stringify({
-                    title,
-                    description,
-                    image_url: '' // em algum momento eu mudo isso
+                    title: title,
+                    description: description,
+                    user: 1 // mudar depois
                 })
             });
 
@@ -36,7 +39,7 @@ function PlaylistCreate() {
 
             // Limpar os campos do formulário após o envio
             setErrorMessage('');
-            alert('Playlist created successfully!'); // Ou você pode redirecionar para outra página, etc.
+            alert('Playlist created successfully!');
         } catch (error) {
             console.error('Error creating playlist:', error);
             setErrorMessage('Failed to create playlist. Please try again later.');
