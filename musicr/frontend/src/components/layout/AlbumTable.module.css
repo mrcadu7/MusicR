@@ -20,18 +20,24 @@
 
 .album-table th:nth-child(2),
 .album-table td:nth-child(2) {
-    width: 400px; /* coluna do título da música */
+    width: 350px; /* coluna do título da música */
     overflow: hidden; /* Oculta o texto que ultrapassa a largura da célula */
     text-overflow: ellipsis; /* Adiciona reticências (...) para indicar que o texto foi cortado */
 }
 
 .album-table th:nth-child(3),
 .album-table td:nth-child(3) {
-    width: 100px; /* colunas de duração */
+    width: 150px; /* colunas de rate */
 }
+
 
 .album-table th:nth-child(4),
 .album-table td:nth-child(4) {
+    width: 100px; /* colunas de duração */
+}
+
+.album-table th:nth-child(5),
+.album-table td:nth-child(5) {
     width: 75px; /* colunas do submit button */
 }
 
