@@ -1,5 +1,6 @@
 import { useState } from 'react';
 import styles from './PlaylistTable.module.css';
+import MusicReviewModal from '../content/MusicReviewModal';
 
 function formatAddedAt(addedAt) {
     const date = new Date(addedAt);
@@ -15,6 +16,20 @@ function PlaylistTable({ playlist, formatDuration }) {
     const [sortByAlbum, setSortByAlbum] = useState(null);
     const [sortByAddedAt, setSortByAddedAt] = useState('asc');
     const [sortByDuration, setSortByDuration] = useState(null);
+    const [selectedSong, setSelectedSong] = useState(null);
+    const [isModalOpen, setIsModalOpen] = useState(false);
+
+    const openModal = (songDetail) => {
+        console.log("songDetail:", songDetail);
+        console.log("selectedSong:", selectedSong);
+        setSelectedSong(songDetail);
+        setIsModalOpen(true);
+    };
+
+    const closeModal = () => {
+        console.log("closeModal:");
+        setIsModalOpen(false);
+    };
 
     const handleSortByTitle = () => {
         setSortByTitle(sortByTitle === 'asc' ? 'desc' : 'asc');
@@ -105,30 +120,33 @@ function PlaylistTable({ playlist, formatDuration }) {
 
 
     return (
-        <table className={styles['playlist-table']}>
-            <thead>
-                <tr>
-                    <th>#</th>
-                    <th onClick={handleSortByTitle}>Title {renderSortArrow(sortByTitle)}</th>
-                    <th onClick={handleSortByArtist}>Artist {renderSortArrow(sortByArtist)}</th>
-                    <th onClick={handleSortByAlbum}>Album {renderSortArrow(sortByAlbum)}</th>
-                    <th onClick={handleSortByAddedAt}>Added at {renderSortArrow(sortByAddedAt)}</th>
-                    <th onClick={handleSortByDuration}>Duration {renderSortArrow(sortByDuration)}</th>
-                </tr>
-            </thead>
-            <tbody>
-                {sortedPlaylist.map((songDetail, index) => (
-                    <tr key={index}>
-                        <td>{index + 1}</td>
-                        <td>{songDetail.song.title}</td>
-                        <td>{songDetail.artist}</td>
-                        <td>{songDetail.album}</td>
-                        <td>{formatAddedAt(songDetail.added_at)}</td>
-                        <td>{formatDuration(songDetail.song.duration)}</td>
+        <div>
+            <table className={styles['playlist-table']}>
+                <thead>
+                    <tr>
+                        <th>#</th>
+                        <th onClick={handleSortByTitle}>Title {renderSortArrow(sortByTitle)}</th>
+                        <th onClick={handleSortByArtist}>Artist {renderSortArrow(sortByArtist)}</th>
+                        <th onClick={handleSortByAlbum}>Album {renderSortArrow(sortByAlbum)}</th>
+                        <th onClick={handleSortByAddedAt}>Added at {renderSortArrow(sortByAddedAt)}</th>
+                        <th onClick={handleSortByDuration}>Duration {renderSortArrow(sortByDuration)}</th>
                     </tr>
-                ))}
-            </tbody>
-        </table>
+                </thead>
+                <tbody>
+                    {sortedPlaylist.map((songDetail, index) => (
+                        <tr key={index}>
+                            <td>{index + 1}</td>
+                            <td onClick={() => openModal(songDetail)}>{songDetail.song.title}</td>
+                            <td>{songDetail.artist}</td>
+                            <td>{songDetail.album}</td>
+                            <td>{formatAddedAt(songDetail.added_at)}</td>
+                            <td>{formatDuration(songDetail.song.duration)}</td>
+                        </tr>
+                    ))}
+                </tbody>
+            </table>
+            <MusicReviewModal isOpen={isModalOpen} onClose={closeModal} song={selectedSong} />
+        </div>
     );
 }
 
