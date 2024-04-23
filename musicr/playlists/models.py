@@ -67,3 +67,27 @@ class SongReview(models.Model):
     
     def __str__(self):
         return self.song.title
+    
+
+class AlbumReview(models.Model):
+    user = models.ForeignKey('auth.User', on_delete=models.CASCADE)
+    album = models.ForeignKey(Album, on_delete=models.CASCADE)
+    rating = models.FloatField(default=0, validators=[MinValueValidator(0.5), MaxValueValidator(5)])
+    comment = models.TextField(max_length=512, blank=True, null=True)
+    created_at = models.DateTimeField(auto_now_add=True)
+    updated_at = models.DateTimeField(auto_now=True)
+    
+    def __str__(self):
+        return self.album.title
+    
+
+class ArtistReview(models.Model):
+    user = models.ForeignKey('auth.User', on_delete=models.CASCADE)
+    artist = models.ForeignKey(Artist, on_delete=models.CASCADE)
+    rating = models.FloatField(default=0, validators=[MinValueValidator(0.5), MaxValueValidator(5)])
+    comment = models.TextField(max_length=512, blank=True, null=True)
+    created_at = models.DateTimeField(auto_now_add=True)
+    updated_at = models.DateTimeField(auto_now=True)
+    
+    def __str__(self):
+        return self.artist.name

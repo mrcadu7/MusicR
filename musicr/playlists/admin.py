@@ -30,6 +30,18 @@ class SongReviewAdmin(admin.ModelAdmin):
     list_display = ('user', 'song', 'rating', 'created_at')
     list_filter = ('user', 'song')
     search_fields = ('user__username', 'song__title')
+    
+
+class AlbumReviewAdmin(admin.ModelAdmin):
+    list_display = ('user', 'album', 'rating', 'created_at')
+    list_filter = ('user', 'album')
+    search_fields = ('user__username', 'album__title')
+    
+
+class ArtistReviewAdmin(admin.ModelAdmin):
+    list_display = ('user', 'artist', 'rating', 'created_at')
+    list_filter = ('user', 'artist')
+    search_fields = ('user__username', 'artist__name')
 
 admin.site.register(Artist, ArtistAdmin)
 admin.site.register(Album, AlbumAdmin)
@@ -37,3 +49,5 @@ admin.site.register(Song, SongAdmin)
 admin.site.register(Playlists, PlaylistAdmin)
 admin.site.register(Addition, AdditionAdmin)
 admin.site.register(SongReview, SongReviewAdmin)
+admin.site.register(AlbumReview, AlbumReviewAdmin)
+admin.site.register(ArtistReview, ArtistReviewAdmin)

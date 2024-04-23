@@ -202,9 +202,7 @@ class SongExists(APIView):
         return Response({'exists': exists})
     
 
-# reviews
-# songs
-
+# reviews de songs
 class SongReviewListCreate(generics.ListCreateAPIView):
     queryset = SongReview.objects.all()
     serializer_class = SongReviewSerializer
@@ -255,3 +253,101 @@ class SongReviewExists(APIView):
         
         # Retorna um JSON indicando se a revisão existe ou não
         return Response({'exists': song_review_exists}, status=status.HTTP_200_OK)
+    
+    
+# reviews de albuns
+class AlbumReviewListCreate(generics.ListCreateAPIView):
+    queryset = AlbumReview.objects.all()
+    serializer_class = AlbumReviewSerializer
+
+    def perform_create(self, serializer):
+        user = self.request.user
+        album = serializer.validated_data['album']
+        existing_review = AlbumReview.objects.filter(user=user, album=album).exists()
+        if existing_review:
+            raise ValidationError("O usuário já deixou uma revisão para esta album.")
+
+        serializer.save(user=user)
+
+class AlbumReviewRetrieveUpdateDestroy(generics.RetrieveUpdateDestroyAPIView):
+    serializer_class = AlbumReviewSerializer
+
+    def get_object(self):
+        user_id = self.kwargs.get('user_id')
+        album_id = self.kwargs.get('album_id')
+        
+        try:
+            review = AlbumReview.objects.get(user_id=user_id, album_id=album_id)
+            return review
+        except AlbumReview.DoesNotExist:
+            raise NotFound("A revisão de música não foi encontrada para este usuário")
+        
+        
+class ListAllAlbumReviewsByAlbum(APIView):
+    def get(self, request, album_id):
+        album_reviews = AlbumReview.objects.filter(album_id=album_id)
+        serializer = AlbumReviewSerializer(album_reviews, many=True)
+        return Response(serializer.data)
+
+class ListAllAlbumReviewsByUser(APIView):
+    def get(self, request, user_id):
+        album_reviews = AlbumReview.objects.filter(user_id=user_id)
+        serializer = AlbumReviewSerializer(album_reviews, many=True)
+        return Response(serializer.data)
+
+    
+class AlbumReviewExists(APIView):
+    def get(self, request, user_id, album_id):
+        album_review_exists = AlbumReview.objects.filter(user_id=user_id, album_id=album_id).exists()
+
+        return Response({'exists': album_review_exists}, status=status.HTTP_200_OK)
+    
+
+# reviews de artistas
+class ArtistReviewListCreate(generics.ListCreateAPIView):
+    queryset = ArtistReview.objects.all()
+    serializer_class = ArtistReviewSerializer
+
+    def perform_create(self, serializer):
+        user = self.request.user
+        artist = serializer.validated_data['artist']
+        existing_review = ArtistReview.objects.filter(user=user, artist=artist).exists()
+        if existing_review:
+            raise ValidationError("O usuário já deixou uma revisão para este artista.")
+
+        serializer.save(user=user)
+
+
+class ArtistReviewRetrieveUpdateDestroy(generics.RetrieveUpdateDestroyAPIView):
+    serializer_class = ArtistReviewSerializer
+
+    def get_object(self):
+        user_id = self.kwargs.get('user_id')
+        artist_id = self.kwargs.get('artist_id')
+        
+        try:
+            review = ArtistReview.objects.get(user_id=user_id, artist_id=artist_id)
+            return review
+        except ArtistReview.DoesNotExist:
+            raise NotFound("A revisão de artista não foi encontrada para este usuário")
+        
+        
+class ListAllArtistReviewsByArtist(APIView):
+    def get(self, request, artist_id):
+        artist_reviews = ArtistReview.objects.filter(artist_id=artist_id)
+        serializer = ArtistReviewSerializer(artist_reviews, many=True)
+        return Response(serializer.data)
+
+
+class ListAllArtistReviewsByUser(APIView):
+    def get(self, request, user_id):
+        artist_reviews = ArtistReview.objects.filter(user_id=user_id)
+        serializer = ArtistReviewSerializer(artist_reviews, many=True)
+        return Response(serializer.data)
+
+    
+class ArtistReviewExists(APIView):
+    def get(self, request, user_id, artist_id):
+        artist_review_exists = ArtistReview.objects.filter(user_id=user_id, artist_id=artist_id).exists()
+
+        return Response({'exists': artist_review_exists}, status=status.HTTP_200_OK)
