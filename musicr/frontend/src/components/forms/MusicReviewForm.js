@@ -22,7 +22,7 @@ function MusicReviewForm ( {onSubmit} ) {
     return (
         <form onSubmit={handleSubmit} >
             <div className="form-group">
-                <label htmlFor="rating">Rating</label>
+                <label htmlFor="rating"></label>
                 <StarRate value={rating} onChange={handleRatingChange}/>
             </div>
             <div className="form-group">

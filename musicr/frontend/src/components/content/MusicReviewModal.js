@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import MusicReviewForm from "../forms/MusicReviewForm"
 import styles from './musicreviewmodal.module.css';
 import getCookie from '../../../utils/csfr.js';
@@ -24,11 +24,42 @@ function SuccessMessage({ message }) {
 function MusicReviewModal ({isOpen, onClose, song}) {
     const [errorMessage, setErrorMessage] = useState('');
     const [successMessage, setSuccessMessage] = useState('');
+    const [reviewExists, setReviewExists] = useState(false);
+
+    useEffect(() => {
+        // Verificar se o review existe quando o modal é aberto
+        if (isOpen && song) {
+            checkReviewExists();
+        }
+    }, [isOpen, song]);
+
+    const checkReviewExists = async () => {
+        try {
+            const response = await fetch(`/playlists/song-reviews/exists/1/${song.song.song_id}`); // TODO: lidar com id de usuário
+            if (!response.ok) {
+                throw new Error('Failed to fetch review existence');
+            }
+            const data = await response.json();
+            setReviewExists(data.exists);
+        } catch (error) {
+            console.error('Error checking review existence:', error);
+        }
+    };
     
     const handleSubmit = async ({ rating, review }) => {
         try {
-            const response = await fetch('/playlists/song-reviews/create/', {
-                method: 'POST',
+            let method = 'POST';
+            let url = '/playlists/song-reviews/create/';
+            let success = 'Review created successfully!';
+    
+            if (reviewExists) {
+                method = 'PUT';
+                url = `/playlists/song-reviews/update/1/${song.song.song_id}/`;
+                success = 'Review updated successfully!';
+            }
+
+            const response = await fetch(url, {
+                method: method,
                 headers: {
                     'Content-Type': 'application/json',
                     'X-CSRFToken': csrftoken
@@ -36,8 +67,8 @@ function MusicReviewModal ({isOpen, onClose, song}) {
                 body: JSON.stringify({
                     rating: rating,
                     review: review,
-                    song: song.song.song_id, // Alterado para enviar o ID da música corretamente
-                    user: 1 // mudar depois
+                    song: song.song.song_id,
+                    user: 1 // mudar depois essa merda
                 })
             });
 
@@ -45,7 +76,7 @@ function MusicReviewModal ({isOpen, onClose, song}) {
                 throw new Error('Failed to create review');
             }
 
-            setSuccessMessage('Review created successfully!');
+            setSuccessMessage(success);
             console.log('Success message:', successMessage);
 
             // Fechar o modal após alguns segundos e limpar a mensagem de sucesso

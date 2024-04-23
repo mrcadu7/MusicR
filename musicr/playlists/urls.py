@@ -32,7 +32,8 @@ urlpatterns = [
     
     # Endpoints para song reviews
     path('song-reviews/create/', SongReviewListCreate.as_view(), name='song_review_list_create'),  # Listar e criar avaliações de músicas
-    path('song-reviews/update/<int:pk>/', SongReviewRetrieveUpdateDestroy.as_view(), name='song_review_retrieve_update_destroy'),  # Recuperar, atualizar e deletar uma avaliação de música específica
-    path('song-reviews/by-song/<str:song_id>/', ListSongReviewsBySong.as_view(), name='list_song_reviews_by_song'),  # Listar avaliações de músicas por música específica
-    path('song-reviews/by-user/<int:user_id>/', ListSongReviewsByUser.as_view(), name='list_song_reviews_by_user'),  # Listar avaliações de músicas por usuário específico
+    path('song-reviews/update/<int:user_id>/<str:song_id>/', SongReviewRetrieveUpdateDestroy.as_view(), name='song_review_retrieve_update_destroy'),  # Recuperar, atualizar e deletar uma avaliação de música específica
+    path('song-reviews/by-song/<str:song_id>/', ListAllSongReviewsBySong.as_view(), name='list_song_reviews_by_song'),  # Listar avaliações de músicas por música específica
+    path('song-reviews/by-user/<int:user_id>/', ListAllSongReviewsByUser.as_view(), name='list_song_reviews_by_user'),  # Listar avaliações de músicas por usuário específico
+    path('song-reviews/exists/<int:user_id>/<str:song_id>/', SongReviewExists.as_view(), name='song_review_exists'), # Verificar se uma avaliação de música existe no BD
 ]

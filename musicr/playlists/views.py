@@ -1,6 +1,7 @@
 from django.forms import ValidationError
 from rest_framework import generics, status
 from rest_framework.response import Response
+from rest_framework.exceptions import NotFound
 from rest_framework.views import APIView
 from django.shortcuts import get_object_or_404
 from .models import *
@@ -221,17 +222,36 @@ class SongReviewListCreate(generics.ListCreateAPIView):
         serializer.save(user=user)
 
 class SongReviewRetrieveUpdateDestroy(generics.RetrieveUpdateDestroyAPIView):
-    queryset = SongReview.objects.all()
     serializer_class = SongReviewSerializer
 
-class ListSongReviewsBySong(APIView):
+    def get_object(self):
+        user_id = self.kwargs.get('user_id')
+        song_id = self.kwargs.get('song_id')
+        
+        try:
+            review = SongReview.objects.get(user_id=user_id, song_id=song_id)
+            return review
+        except SongReview.DoesNotExist:
+            raise NotFound("A revisão de música não foi encontrada para este usuário")
+        
+        
+class ListAllSongReviewsBySong(APIView):
     def get(self, request, song_id):
         song_reviews = SongReview.objects.filter(song_id=song_id)
         serializer = SongReviewSerializer(song_reviews, many=True)
         return Response(serializer.data)
 
-class ListSongReviewsByUser(APIView):
+class ListAllSongReviewsByUser(APIView):
     def get(self, request, user_id):
         song_reviews = SongReview.objects.filter(user_id=user_id)
         serializer = SongReviewSerializer(song_reviews, many=True)
         return Response(serializer.data)
+
+    
+class SongReviewExists(APIView):
+    def get(self, request, user_id, song_id):
+        # Verifica se existe uma revisão para a música pelo usuário
+        song_review_exists = SongReview.objects.filter(user_id=user_id, song_id=song_id).exists()
+        
+        # Retorna um JSON indicando se a revisão existe ou não
+        return Response({'exists': song_review_exists}, status=status.HTTP_200_OK)
