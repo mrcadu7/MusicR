@@ -1,6 +1,7 @@
 import { useState } from 'react';
 import styles from './PlaylistTable.module.css';
 import MusicReviewModal from '../content/MusicReviewModal';
+import AlbumReviewModal from '../content/AlbumReviewModal';
 
 function formatAddedAt(addedAt) {
     const date = new Date(addedAt);
@@ -17,18 +18,29 @@ function PlaylistTable({ playlist, formatDuration }) {
     const [sortByAddedAt, setSortByAddedAt] = useState('asc');
     const [sortByDuration, setSortByDuration] = useState(null);
     const [selectedSong, setSelectedSong] = useState(null);
-    const [isModalOpen, setIsModalOpen] = useState(false);
+    const [selectedAlbum, setSelectedAlbum] = useState(null);
+    const [isMusicModalOpen, setIsMusicModalOpen] = useState(false);
+    const [isAlbumModalOpen, setIsAlbumModalOpen] = useState(false);
 
-    const openModal = (songDetail) => {
+    const openMusicModal = (songDetail) => {
         console.log("songDetail:", songDetail);
         console.log("selectedSong:", selectedSong);
         setSelectedSong(songDetail);
-        setIsModalOpen(true);
+        setIsMusicModalOpen(true);
     };
+
+    const openAlbumModal = (albumDetail) => {
+        console.log("album:", albumDetail.album);
+        console.log("selectedAlbum:", selectedAlbum);
+        console.log(isAlbumModalOpen);
+        setSelectedAlbum(albumDetail);
+        setIsAlbumModalOpen(true);
+    }
 
     const closeModal = () => {
         console.log("closeModal:");
-        setIsModalOpen(false);
+        setIsMusicModalOpen(false);
+        setIsAlbumModalOpen(false);
     };
 
     const handleSortByTitle = () => {
@@ -136,16 +148,17 @@ function PlaylistTable({ playlist, formatDuration }) {
                     {sortedPlaylist.map((songDetail, index) => (
                         <tr key={index}>
                             <td>{index + 1}</td>
-                            <td onClick={() => openModal(songDetail)}>{songDetail.song.title}</td>
+                            <td onClick={() => openMusicModal(songDetail)}>{songDetail.song.title}</td>
                             <td>{songDetail.artist}</td>
-                            <td>{songDetail.album}</td>
+                            <td onClick={() => openAlbumModal(songDetail)}>{songDetail.album}</td>
                             <td>{formatAddedAt(songDetail.added_at)}</td>
                             <td>{formatDuration(songDetail.song.duration)}</td>
                         </tr>
                     ))}
                 </tbody>
             </table>
-            <MusicReviewModal isOpen={isModalOpen} onClose={closeModal} song={selectedSong} />
+            <MusicReviewModal isOpen={isMusicModalOpen} onClose={closeModal} song={selectedSong} />
+            <AlbumReviewModal isOpen={isAlbumModalOpen} onClose={closeModal} album={selectedAlbum} />
         </div>
     );
 }
