@@ -5,7 +5,7 @@ from rest_framework import status
 import spotipy
 from spotipy.oauth2 import SpotifyClientCredentials
 from django.db.models import Avg
-from playlists.models import SongReview
+from playlists.models import SongReview, AlbumReview, ArtistReview
 from decouple import config
 
 SPOTIPY_CLIENT_ID = config('SPOTIPY_CLIENT_ID')
@@ -44,6 +44,7 @@ class GetArtistInfo(APIView):
                 "genres": artist['genres'],
                 "image_url": artist['images'][0]['url'] if artist['images'] else None,
                 "albums": [],
+                "average_rating": 0,
             }
 
             albums = spotify.artist_albums(artist_id, album_type='album', limit=50)
@@ -56,6 +57,7 @@ class GetArtistInfo(APIView):
                     "release_date": parse_release_date(album['release_date']),
                     "image_url": album['images'][0]['url'] if album['images'] else None,
                     "tracks": [],
+                    "average_rating": 0,
                 }
 
                 tracks = spotify.album_tracks(album['id'])
@@ -79,8 +81,15 @@ class GetArtistInfo(APIView):
                     track_info['average_rating'] = average_rating
                     
                     album_info["tracks"].append(track_info)
+                    
+                average_rating = self.get_album_average_rating(album['id'])
+                album_info['average_rating'] = average_rating
 
                 artist_info["albums"].append(album_info)
+                
+            average_rating = self.get_artist_average_rating(artist['id'])
+            artist_info['average_rating'] = average_rating
+            
             return Response(artist_info)
         
         return Response({"error": "Artista não encontrado"}, status=status.HTTP_404_NOT_FOUND)
@@ -91,6 +100,15 @@ class GetArtistInfo(APIView):
             average_rating = SongReview.objects.filter(song_id=track_id).aggregate(Avg('rating'))['rating__avg']
             return average_rating
  
+    def get_album_average_rating(self, album_id):
+        # Filtrar as avaliações para o álbum específico e calcular a média
+        average_rating = AlbumReview.objects.filter(album_id=album_id).aggregate(Avg('rating'))['rating__avg']
+        return average_rating
+
+    def get_artist_average_rating(self, artist_id):
+        # Filtrar as avaliações para o artista específico e calcular a média
+        average_rating = ArtistReview.objects.filter(artist_id=artist_id).aggregate(Avg('rating'))['rating__avg']
+        return average_rating
     
 def parse_release_date(date_str):
     try:
