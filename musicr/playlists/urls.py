@@ -43,11 +43,4 @@ urlpatterns = [
     path('album-reviews/by-album/<str:album_id>/', ListAllAlbumReviewsByAlbum.as_view(), name='list_album_reviews_by_album'),  # Listar avaliações de músicas por música específica
     path('album-reviews/by-user/<int:user_id>/', ListAllAlbumReviewsByUser.as_view(), name='list_album_reviews_by_user'),  # Listar avaliações de músicas por usuário específico
     path('album-reviews/exists/<int:user_id>/<str:album_id>/', AlbumReviewExists.as_view(), name='album_review_exists'),
-    
-    # Endpoints para artist reviews
-    path('artist-reviews/create/', ArtistReviewListCreate.as_view(), name='artist_review_list_create'),  # Listar e criar avaliações de artistas
-    path('artist-reviews/update/<int:user_id>/<str:artist_id>/', ArtistReviewRetrieveUpdateDestroy.as_view(), name='artist_review_retrieve_update_destroy'),  # Recuperar, atualizar e deletar uma avaliação de artista específica
-    path('artist-reviews/by-artist/<str:artist_id>/', ListAllArtistReviewsByArtist.as_view(), name='list_artist_reviews_by_artist'),  # Listar avaliações de artistas por artista específico
-    path('artist-reviews/by-user/<int:user_id>/', ListAllArtistReviewsByUser.as_view(), name='list_artist_reviews_by_user'),  # Listar avaliações de artistas por usuário específico
-    path('artist-reviews/exists/<int:user_id>/<str:artist_id>/', ArtistReviewExists.as_view(), name='artist_review_exists'), # Verificar se uma avaliação de artista existe no BD
 ]

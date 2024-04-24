@@ -1,0 +1,33 @@
+.container {
+    display: flex;
+    align-items: center;
+    font-size: 22px;
+}
+
+.star_outline_icon {
+    color: #000000; /* Cor para a estrela oca */
+    font-size: 32px;
+    text-shadow: 2px 2px 2px rgba(0, 0, 0, 0.4); /* Aumentando a intensidade e o deslocamento da sombra */
+}
+
+.star_icon {
+    color: #FFD700; /* Cor para as estrelas cheias */
+
+    font-size: 32px;
+    filter: drop-shadow(0px 0px 1px #5d4e00);
+    padding-bottom: 5px;
+}
+
+.bomb_icon {
+    color: #797979; /* Cor para o ícone de bomba */
+    font-size: 28px;
+    filter: drop-shadow(0px 0px 1px #000000);
+    padding-bottom: 6px;
+}
+
+.music_off_icon {
+    color: #797979; /* Cor para o ícone de música desativada */
+    font-size: 32px;
+    filter: drop-shadow(0px 0px 1px #000000);
+    padding-bottom: 5px;
+}

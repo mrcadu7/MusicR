@@ -74,9 +74,3 @@ class AlbumReviewSerializer(serializers.ModelSerializer):
     class Meta:
         model = AlbumReview
         fields = '__all__'
-        
-
-class ArtistReviewSerializer(serializers.ModelSerializer):
-    class Meta:
-        model = ArtistReview
-        fields = '__all__'

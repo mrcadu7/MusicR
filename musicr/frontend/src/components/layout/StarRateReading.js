@@ -4,7 +4,7 @@ import Rating from '@mui/material/Rating';
 
 
 function StarRateReading ( { value } ) {
-    // Arredonda o valor para a precisão de 0.5 pra pegar a estrela certa
+    // POSSO DEIXAR MAIS PRECISO DEPOIS COM 0.1
     const roundedValue = Math.floor(value * 2) / 2;
 
     return (
