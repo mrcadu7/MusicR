@@ -15,7 +15,7 @@ function Navbar() {
                             <Link className="nav-link" to="/playlist">Playlists</Link>
                         </li>
                         <li className={`nav-item ${styles.item}`}>
-                            <Link className="nav-link" to="/">Opt2</Link>
+                            <Link className="nav-link" to="/reviews">Reviews</Link>
                         </li>
                     </ul>
                 </div>

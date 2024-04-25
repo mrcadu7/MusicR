@@ -66,7 +66,7 @@ function AlbumReviewModal ({isOpen, onClose, album}) {
                 },
                 body: JSON.stringify({
                     rating: rating,
-                    review: review,
+                    comment: review,
                     album: album.song.album,
                     user: 1 // mudar depois essa merda
                 })

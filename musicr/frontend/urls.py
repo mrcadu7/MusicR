@@ -6,4 +6,5 @@ urlpatterns = [
     path('playlist/', index),
     path('playlist/<int:playlist_id>/', index),
     path('playlist/create/', index),
+    path('reviews/', index)
 ]

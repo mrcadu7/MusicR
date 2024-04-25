@@ -4,7 +4,8 @@ import styles from './Footer.module.css';
 function Footer() {
     return (
         <footer className={`footer ${styles.footer}`}>
-            <div className="container">
+            <div className={`container ${styles.container}`}>
+                <br />
                 <ul className={`social_list ${styles.social_list}`}>
                     <li>
                         <a href="https://github.com/mrcadu7"><FaGithub /></a>

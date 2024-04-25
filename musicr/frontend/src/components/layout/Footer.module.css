@@ -1,36 +1,35 @@
-/* Footer.module.css */
-
 .footer {
   background-color: #6B2C91;
   color: #000000;
-  padding: 3em;
+  padding: 1em; /* Reduza o padding para ajustar o tamanho */
   text-align: center;
-  position: bottom;
+  display: flex;
+  align-items: center;
+  position: fixed;
+  height: 80px; /* Ajuste o height para o novo tamanho desejado */
   bottom: 0;
   width: 100%;
 }
 
 .social_list {
-  display: flex;
+  text-align: center;
   justify-content: center;
+  display: flex;
+  align-items: center;
   list-style-type: none;
   padding: 0;
 }
 
 .social_list li {
-  margin: 0 1em;
+  margin: 0 0.5em; /* Reduza o margin para ajustar o espaçamento entre os itens */
 }
 
 .social_list a:hover {
   color: #000000;
 }
 
-.social_list a:visited {
-  color: #F5E5FF;
-}
-
 .social_list svg {
-  font-size: 1.5em;
+  font-size: 1em; /* Reduza o tamanho da estrela */
   cursor: pointer;
   color: #F5E5FF;
 }
@@ -40,10 +39,14 @@
 }
 
 .copy_right {
-  margin-top: 2em;
+  margin-top: 1em; /* Reduza o margin-top para ajustar o espaçamento */
 }
 
 .copy_right span {
   font-weight: bold;
   color: #000000;
+}
+
+.container {
+  padding-bottom: 10px;
 }

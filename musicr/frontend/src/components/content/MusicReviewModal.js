@@ -66,7 +66,7 @@ function MusicReviewModal ({isOpen, onClose, song}) {
                 },
                 body: JSON.stringify({
                     rating: rating,
-                    review: review,
+                    comment: review,
                     song: song.song.song_id,
                     user: 1 // mudar depois essa merda
                 })

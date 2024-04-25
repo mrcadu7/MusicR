@@ -8,6 +8,7 @@ import PlaylistCreate from './pages/PlaylistCreate';
 import Navbar from './layout/Navbar';
 import Footer from './layout/Footer';
 import Container from './layout/Container';
+import Reviews from './pages/Reviews';
 
 
 function App() {
@@ -20,6 +21,7 @@ function App() {
           <Route path="/playlist" element={<Playlists/>} />
           <Route path="/playlist/:playlistId" element={<PlaylistDetailsPage />} />
           <Route path="/playlist/create" element={<PlaylistCreate />} />
+          <Route path='/reviews' element={<Reviews />} />
         </Routes>
       </Container>
       <Footer/>
