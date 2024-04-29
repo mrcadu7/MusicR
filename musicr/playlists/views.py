@@ -232,7 +232,18 @@ class SongReviewRetrieveUpdateDestroy(generics.RetrieveUpdateDestroyAPIView):
         except SongReview.DoesNotExist:
             raise NotFound("A revisão de música não foi encontrada para este usuário")
         
-        
+
+class ListAllSongReviews(APIView):
+    pagination_class = CustomPagination  # Adicionando paginação à visualização
+
+    def get(self, request):
+        songs = SongReview.objects.all()
+        paginator = self.pagination_class()
+        result_page = paginator.paginate_queryset(songs, request)
+        serializer = SongReviewSerializer(result_page, many=True)
+        return paginator.get_paginated_response(serializer.data)
+
+       
 class ListAllSongReviewsBySong(APIView):
     def get(self, request, song_id):
         song_reviews = SongReview.objects.filter(song_id=song_id)
@@ -282,12 +293,24 @@ class AlbumReviewRetrieveUpdateDestroy(generics.RetrieveUpdateDestroyAPIView):
         except AlbumReview.DoesNotExist:
             raise NotFound("A revisão de música não foi encontrada para este usuário")
         
+
+class ListAllAlbumReviews(APIView):
+    pagination_class = CustomPagination  # Adicionando paginação à visualização
+
+    def get(self, request):
+        albums = AlbumReview.objects.all()
+        paginator = self.pagination_class()
+        result_page = paginator.paginate_queryset(albums, request)
+        serializer = AlbumReviewSerializer(result_page, many=True)
+        return paginator.get_paginated_response(serializer.data)
+
         
 class ListAllAlbumReviewsByAlbum(APIView):
     def get(self, request, album_id):
         album_reviews = AlbumReview.objects.filter(album_id=album_id)
         serializer = AlbumReviewSerializer(album_reviews, many=True)
         return Response(serializer.data)
+
 
 class ListAllAlbumReviewsByUser(APIView):
     def get(self, request, user_id):

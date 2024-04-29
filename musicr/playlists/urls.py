@@ -36,6 +36,7 @@ urlpatterns = [
     path('song-reviews/by-song/<str:song_id>/', ListAllSongReviewsBySong.as_view(), name='list_song_reviews_by_song'),  # Listar avaliações de músicas por música específica
     path('song-reviews/by-user/<int:user_id>/', ListAllSongReviewsByUser.as_view(), name='list_song_reviews_by_user'),  # Listar avaliações de músicas por usuário específico
     path('song-reviews/exists/<int:user_id>/<str:song_id>/', SongReviewExists.as_view(), name='song_review_exists'), # Verificar se uma avaliação de música existe no BD
+    path('song-reviews/view/all/', ListAllSongReviews.as_view(), name='list_all_song_reviews'),
     
     # Endpoints para album reviews
     path('album-reviews/create/', AlbumReviewListCreate.as_view(), name='album_review_list_create'),  # Listar e criar avaliações de músicas
@@ -43,4 +44,5 @@ urlpatterns = [
     path('album-reviews/by-album/<str:album_id>/', ListAllAlbumReviewsByAlbum.as_view(), name='list_album_reviews_by_album'),  # Listar avaliações de músicas por música específica
     path('album-reviews/by-user/<int:user_id>/', ListAllAlbumReviewsByUser.as_view(), name='list_album_reviews_by_user'),  # Listar avaliações de músicas por usuário específico
     path('album-reviews/exists/<int:user_id>/<str:album_id>/', AlbumReviewExists.as_view(), name='album_review_exists'),
+    path('album-reviews/view/all/', ListAllAlbumReviews.as_view(), name='list_all_album_reviews'),
 ]

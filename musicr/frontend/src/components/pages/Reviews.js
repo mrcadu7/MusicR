@@ -1,9 +1,17 @@
+import ReviewsContainer from "../layout/ReviewsContainer"
+
 function Reviews () {
 
     return (
         <div>
-            <h1>Reviews</h1>
+            <div className="header">
+                <h1>Reviews</h1>
+            </div>
+            <div className="content">
+                <ReviewsContainer />
+            </div>
         </div>
+
     )
 }
 

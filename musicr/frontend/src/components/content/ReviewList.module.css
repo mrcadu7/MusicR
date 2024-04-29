@@ -1,0 +1,44 @@
+.text_container {
+    grid-row-start: 8; /* Iniciar na primeira linha da grade */
+    grid-row-end: auto; /* Permitir que o conteúdo expanda conforme necessário */
+}
+
+.dynamic_content {
+    padding-bottom: 56px;
+    margin-bottom: 0;
+}
+
+.text_list h2 {
+    font-weight: 500;
+    font-size: 1.25rem;
+    letter-spacing: 0;
+    line-height: 1.2;
+    padding-left: 9px;
+    text-transform: uppercase;
+    margin-bottom: 1em;
+}
+
+
+.reviews {
+    padding: 5px 0;
+}
+
+.reviews li {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    height: 54px;
+    margin-bottom: 0;
+    border-bottom: 1px solid;
+    padding: 8px 0;
+}
+
+.reviews p {
+    background-color: transparent;
+    color: red;
+    font-size: inherit;
+    font-weight: 400;
+    line-height: inherit;
+    letter-spacing: inherit;
+    text-decoration: none;
+}

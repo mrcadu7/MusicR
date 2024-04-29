@@ -1,0 +1,13 @@
+.buttonContainer {
+    display: flex;
+    justify-content: space-between;
+    margin-bottom: 1em; /* Adicione margem inferior para separar dos elementos abaixo */
+}
+
+.buttonContainer button {
+    margin-right: 1em;
+    padding: 0.5em;
+    cursor: pointer;
+    flex: 1;
+    /* Adicione estilos adicionais conforme necessário */
+}
