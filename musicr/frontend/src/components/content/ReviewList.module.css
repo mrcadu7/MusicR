@@ -41,4 +41,18 @@
     line-height: inherit;
     letter-spacing: inherit;
     text-decoration: none;
+    
+}
+
+.title {
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+    max-width: 45ch;
+    margin-right: 30px;
+    font-size: inherit;
+    font-weight: 400;
+    line-height: inherit;
+    letter-spacing: inherit;
+    text-decoration: none;
 }

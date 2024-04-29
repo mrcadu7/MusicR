@@ -21,13 +21,17 @@ function ReviewList({ listName, reviews, loading, error }) {
                         Ver todos
                     </a>
                     <ul className={styles.reviews}>
-                        {reviews.map((review, index) => (
-                            <li key={index}>
-                                <p>{review.album ? `Álbum: ${review.album}` : `Música: ${review.song}`}</p>
-                                <p><StarRateReading value={review.rating} /></p>
-                            </li>
-                        ))}
-                    </ul>
+                    {reviews.map((review, index) => (
+                        <li key={index}>
+                            <div className={styles.title}>
+                                {review.album_details ? `${review.album_details.title}` : `${review.song_details.title}`}
+                            </div>
+                            <div>
+                                <StarRateReading value={review.rating} />
+                            </div>
+                        </li>
+                    ))}
+                </ul>
                 </div>
             </section>
         </div>

@@ -65,12 +65,15 @@ class PlaylistSerializer(serializers.ModelSerializer):
     
 
 class SongReviewSerializer(serializers.ModelSerializer):
+    song_details = SongSerializer(source='song', read_only=True)
+    
     class Meta:
         model = SongReview
-        fields = '__all__'
+        fields = 'rating', 'comment', 'created_at', 'updated_at', 'user', 'song_details'
         
 
 class AlbumReviewSerializer(serializers.ModelSerializer):
+    album_details = AlbumSerializer(source='album', read_only=True)
     class Meta:
         model = AlbumReview
-        fields = '__all__'
+        fields = 'rating', 'comment', 'created_at', 'updated_at', 'user', 'album_details'

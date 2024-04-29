@@ -10,9 +10,9 @@ from rest_framework.pagination import PageNumberPagination
 
 
 class CustomPagination(PageNumberPagination):
-    page_size = 10  # Número de itens por página
+    page_size = 1000  # resolver isso em algum momento
     page_size_query_param = 'page_size'
-    max_page_size = 1000  # Número máximo de itens por página
+    max_page_size = 1000
 
 
 class PlaylistListCreate(generics.ListCreateAPIView):
@@ -39,16 +39,13 @@ class AddSongToPlaylistView(APIView):
     def post(self, request, playlist_id):
         playlist = get_object_or_404(Playlists, pk=playlist_id)
         
-        # Verifica se a solicitação POST contém dados
         if request.data:
-            # Se houver dados na solicitação, tenta serializá-los e adicioná-los à playlist
             serializer = AdditionSerializer(data=request.data)
             if serializer.is_valid():
                 serializer.save(playlist=playlist)
                 return Response(serializer.data, status=status.HTTP_201_CREATED)
             return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
         else:
-            # Se não houver dados na solicitação, retorna uma resposta indicando que nenhum dado foi fornecido
             return Response({"error": "Nenhum dado fornecido na solicitação"}, status=status.HTTP_400_BAD_REQUEST)
 
 
@@ -142,7 +139,7 @@ class ViewAlbum(APIView):
 
 
 class ListAllAlbums(APIView):
-    pagination_class = CustomPagination  # Adicionando paginação à visualização
+    pagination_class = CustomPagination
 
     def get(self, request):
         albums = Album.objects.all()
@@ -186,7 +183,7 @@ class ViewSong(APIView):
   
     
 class ListAllSongs(APIView):
-    pagination_class = CustomPagination  # Adicionando paginação à visualização
+    pagination_class = CustomPagination
 
     def get(self, request):
         songs = Song.objects.all()
@@ -211,12 +208,10 @@ class SongReviewListCreate(generics.ListCreateAPIView):
         user = self.request.user
         song = serializer.validated_data['song']
 
-        # Verifica se o usuário já deixou uma revisão para esta música
         existing_review = SongReview.objects.filter(user=user, song=song).exists()
         if existing_review:
             raise ValidationError("O usuário já deixou uma revisão para esta música.")
 
-        # Se não houver revisão existente, salva a nova revisão
         serializer.save(user=user)
 
 class SongReviewRetrieveUpdateDestroy(generics.RetrieveUpdateDestroyAPIView):
