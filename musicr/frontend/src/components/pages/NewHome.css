@@ -73,6 +73,12 @@
     color: #ffffff;
     padding: 0.75rem 1.5rem;
     border-radius: 25px;
+    border: none;
+    cursor: pointer;
+    text-decoration: none;
+    font-family: inherit;
+    font-size: inherit;
+    font-weight: inherit;
 }
 
 .nav-link.create-btn:hover {
@@ -1196,6 +1202,9 @@
     font-size: 0.875rem;
     font-weight: 500;
     transition: all 0.3s ease;
+    border: none;
+    cursor: pointer;
+    font-family: inherit;
 }
 
 .create-playlist-link:hover {

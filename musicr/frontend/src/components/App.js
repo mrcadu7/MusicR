@@ -4,7 +4,6 @@ import { createRoot } from 'react-dom/client';
 import NewHome from './pages/NewHome';
 import Playlists from './pages/Playlists';
 import PlaylistDetailsPage from './pages/PlaylistDetailsPage';
-import PlaylistCreate from './pages/PlaylistCreate';
 import Navbar from './layout/Navbar';
 import Footer from './layout/Footer';
 import Container from './layout/Container';
@@ -15,17 +14,7 @@ function App() {
   return (
     <Router>
       <Routes>
-        <Route path="/" element={<NewHome/>} />
-        <Route path="/playlist" element={
-          <>
-            <Navbar/>
-            <Container customClass="min-height">
-              <Playlists/>
-            </Container>
-            <Footer/>
-          </>
-        } />
-        <Route path="/playlist/:playlistId" element={
+        <Route path="/" element={<NewHome/>} />        <Route path="/playlist" element={<Playlists/>} />        <Route path="/playlist/:playlistId" element={
           <>
             <Navbar/>
             <Container customClass="min-height">
@@ -34,15 +23,7 @@ function App() {
             <Footer/>
           </>
         } />
-        <Route path="/playlist/create" element={
-          <>
-            <Navbar/>
-            <Container customClass="min-height">
-              <PlaylistCreate />
-            </Container>
-            <Footer/>
-          </>
-        } />        <Route path='/reviews' element={<Reviews />} />
+        <Route path='/reviews' element={<Reviews />} />
       </Routes>
     </Router>
   );

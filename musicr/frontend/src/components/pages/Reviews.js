@@ -1,8 +1,23 @@
-import React from 'react';
+import React, { useState } from 'react';
 import { Link } from 'react-router-dom';
 import ReviewsContainer from "../layout/ReviewsContainer";
+import CreatePlaylistModal from '../content/CreatePlaylistModal';
 
 function Reviews() {
+    const [showCreatePlaylistModal, setShowCreatePlaylistModal] = useState(false);
+
+    const handleCreatePlaylist = () => {
+        setShowCreatePlaylistModal(true);
+    };
+
+    const handleCloseCreatePlaylistModal = () => {
+        setShowCreatePlaylistModal(false);
+    };
+
+    const handlePlaylistCreated = (newPlaylist) => {
+        console.log('New playlist created:', newPlaylist);
+    };
+
     return (
         <div style={{ 
             minHeight: '100vh', 
@@ -52,26 +67,31 @@ function Reviews() {
                             fontWeight: '500'
                         }}>
                             Reviews
-                        </Link>
-                        <Link to="/playlist/create" style={{
+                        </Link>                        <button onClick={handleCreatePlaylist} style={{
                             background: 'linear-gradient(135deg, #8a2be2, #663399)',
                             color: '#ffffff',
-                            textDecoration: 'none',
+                            border: 'none',
                             padding: '0.5rem 1.5rem',
                             borderRadius: '20px',
                             fontWeight: '500',
+                            cursor: 'pointer',
                             transition: 'all 0.3s ease'
                         }}>
                             Create Playlist
-                        </Link>
+                        </button>
                     </nav>
                 </div>
-            </header>
-
-            {/* Content com padding-top para compensar o header fixo */}
+            </header>            {/* Content com padding-top para compensar o header fixo */}
             <div style={{ paddingTop: '80px' }}>
                 <ReviewsContainer />
             </div>
+
+            {/* Create Playlist Modal */}
+            <CreatePlaylistModal
+                isOpen={showCreatePlaylistModal}
+                onClose={handleCloseCreatePlaylistModal}
+                onSuccess={handlePlaylistCreated}
+            />
         </div>
     );
 }

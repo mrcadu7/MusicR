@@ -1,6 +1,7 @@
 import React, { useState, useRef, useEffect } from 'react';
 import { Link } from 'react-router-dom';
 import axios from 'axios';
+import CreatePlaylistModal from '../content/CreatePlaylistModal';
 import './NewHome.css';
 
 function NewHome() {    const [searchQuery, setSearchQuery] = useState('');
@@ -11,7 +12,8 @@ function NewHome() {    const [searchQuery, setSearchQuery] = useState('');
     const [showAlbumModal, setShowAlbumModal] = useState(false);    const [playlists, setPlaylists] = useState([]);
     const [showPlaylistDropdown, setShowPlaylistDropdown] = useState(null);
     const [dropdownPosition, setDropdownPosition] = useState({ top: 0, left: 0 });
-    const [successMessage, setSuccessMessage] = useState('');    const [showReviewModal, setShowReviewModal] = useState(false);    const [reviewRating, setReviewRating] = useState(0);
+    const [successMessage, setSuccessMessage] = useState('');    const [showReviewModal, setShowReviewModal] = useState(false);
+    const [showCreatePlaylistModal, setShowCreatePlaylistModal] = useState(false);    const [reviewRating, setReviewRating] = useState(0);
     const [reviewText, setReviewText] = useState('');
     const [hoverRating, setHoverRating] = useState(0);
     
@@ -105,6 +107,19 @@ function NewHome() {    const [searchQuery, setSearchQuery] = useState('');
     };    const closeAlbumModal = () => {
         setShowAlbumModal(false);
         setSelectedAlbum(null);
+    };
+
+    const handleCreatePlaylist = () => {
+        setShowCreatePlaylistModal(true);
+    };
+
+    const handleCloseCreatePlaylistModal = () => {
+        setShowCreatePlaylistModal(false);
+    };
+
+    const handlePlaylistCreated = (newPlaylist) => {
+        // Atualizar a lista de playlists se necessário
+        setPlaylists(prev => [...prev, newPlaylist]);
     };
 
     // Função para obter CSRF token
@@ -358,7 +373,7 @@ function NewHome() {    const [searchQuery, setSearchQuery] = useState('');
                     <nav className="nav-links">
                         <Link to="/playlist" className="nav-link">Playlists</Link>
                         <Link to="/reviews" className="nav-link">Reviews</Link>
-                        <Link to="/playlist/create" className="nav-link create-btn">Create Playlist</Link>
+                        <button onClick={handleCreatePlaylist} className="nav-link create-btn">Create Playlist</button>
                     </nav>
                 </div>
             </header>
@@ -597,12 +612,11 @@ function NewHome() {    const [searchQuery, setSearchQuery] = useState('');
                                                                             <span className="playlist-count">{playlist.song_count || 0} músicas</span>
                                                                         </button>
                                                                     ))
-                                                                ) : (
-                                                                    <div className="no-playlists">
+                                                                ) : (                                                                    <div className="no-playlists">
                                                                         <span>Nenhuma playlist encontrada</span>
-                                                                        <Link to="/playlist/create" className="create-playlist-link">
+                                                                        <button onClick={handleCreatePlaylist} className="create-playlist-link">
                                                                             Criar primeira playlist
-                                                                        </Link>                                                                    </div>
+                                                                        </button>                                                                    </div>
                                                                 )}
                                                             </div>
                                                         </div>
@@ -722,12 +736,11 @@ function NewHome() {    const [searchQuery, setSearchQuery] = useState('');
                                                                                 <span className="playlist-count">{playlist.song_count || 0} músicas</span>
                                                                             </button>
                                                                         ))
-                                                                    ) : (
-                                                                        <div className="no-playlists">
+                                                                    ) : (                                                                        <div className="no-playlists">
                                                                             <span>Nenhuma playlist encontrada</span>
-                                                                            <Link to="/playlist/create" className="create-playlist-link">
+                                                                            <button onClick={handleCreatePlaylist} className="create-playlist-link">
                                                                                 Criar primeira playlist
-                                                                            </Link>                                                                        </div>
+                                                                            </button>                                                                        </div>
                                                                     )}
                                                                 </div>
                                                             </div>
@@ -820,13 +833,19 @@ function NewHome() {    const [searchQuery, setSearchQuery] = useState('');
                                     </button>
                                     <button type="submit" className="btn-submit">
                                         Submit Review
-                                    </button>
-                                </div>
+                                    </button>                                </div>
                             </form>
                         </div>
                     </div>
                 </div>
             )}
+
+            {/* Create Playlist Modal */}
+            <CreatePlaylistModal
+                isOpen={showCreatePlaylistModal}
+                onClose={handleCloseCreatePlaylistModal}
+                onSuccess={handlePlaylistCreated}
+            />
         </div>
     );
 }
