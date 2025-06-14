@@ -42,16 +42,7 @@ function App() {
             </Container>
             <Footer/>
           </>
-        } />
-        <Route path='/reviews' element={
-          <>
-            <Navbar/>
-            <Container customClass="min-height">
-              <Reviews />
-            </Container>
-            <Footer/>
-          </>
-        } />
+        } />        <Route path='/reviews' element={<Reviews />} />
       </Routes>
     </Router>
   );

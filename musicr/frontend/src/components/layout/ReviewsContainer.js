@@ -50,24 +50,56 @@ function ReviewsContainer() {
     }, [userId, reviewType]);
 
     return (
-        <div className={styles.container}>
-            {error && <p>{error}</p>}
-            <div className={styles.toggle}>
-            <ReviewListButtons
-                handleToggleReviewType={setReviewType}
-                reviewType={reviewType}
-            />
+        <div className={styles.modernReviewsPage}>
+            {/* Modern Header */}
+            <header className={styles.reviewsHeader}>
+                <div className={styles.headerContent}>
+                    <h1 className={styles.pageTitle}>
+                        Your Musical <span className={styles.gradientText}>Reviews</span>
+                    </h1>
+                    <p className={styles.pageSubtitle}>
+                        Explore your thoughts and discover what the community thinks about music
+                    </p>
+                </div>
+                
+                {/* Animated Background */}
+                <div className={styles.animatedBg}>
+                    <div className={styles.gradientOrb1}></div>
+                    <div className={styles.gradientOrb2}></div>
+                </div>
+            </header>
+
+            {/* Review Type Toggle */}
+            <div className={styles.toggleSection}>
+                <ReviewListButtons
+                    handleToggleReviewType={setReviewType}
+                    reviewType={reviewType}
+                />
             </div>
-            <ReviewList
-                listName="Seus reviews"
-                reviews={userReviews}
-                loading={loading}
-            />
-            <ReviewList
-                listName="Social"
-                reviews={socialReviews}
-                loading={loading}
-            />
+
+            {/* Main Content */}
+            <div className={styles.reviewsContainer}>
+                {error && (
+                    <div className={styles.errorMessage}>
+                        <p>{error}</p>
+                    </div>
+                )}
+                
+                <div className={styles.reviewsSections}>
+                    <ReviewList
+                        listName="SEUS REVIEWS"
+                        reviews={userReviews}
+                        loading={loading}
+                        error={error}
+                    />
+                    <ReviewList
+                        listName="SOCIAL"
+                        reviews={socialReviews}
+                        loading={loading}
+                        error={error}
+                    />
+                </div>
+            </div>
         </div>
     );
 }

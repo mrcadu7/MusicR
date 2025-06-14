@@ -1,11 +1,187 @@
-.container {
-    display: grid;
-    grid-template-columns: repeat(2, minmax(365px, 1fr));
-    grid-gap: 0 20px;
-    grid-auto-rows: 10px;
+/* Modern Reviews Page */
+.modernReviewsPage {
+    min-height: calc(100vh - 80px);
+    background: transparent;
+    color: #ffffff;
+    overflow-x: hidden;
+    position: relative;
 }
 
+/* Header Section */
+.reviewsHeader {
+    position: relative;
+    padding: 4rem 2rem 4rem;
+    text-align: center;
+    overflow: hidden;
+}
 
-.toggle {
-    margin-bottom: 20px; /* Adiciona margem na parte inferior dos botões */
+.headerContent {
+    position: relative;
+    z-index: 2;
+    max-width: 800px;
+    margin: 0 auto;
+}
+
+.pageTitle {
+    font-size: 3.5rem;
+    font-weight: 800;
+    margin: 0 0 1.5rem 0;
+    letter-spacing: -0.02em;
+    line-height: 1.1;
+}
+
+.gradientText {
+    background: linear-gradient(135deg, #8a2be2, #ff6b6b, #4ecdc4);
+    background-size: 200% 200%;
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+    animation: gradientShift 3s ease-in-out infinite;
+}
+
+@keyframes gradientShift {
+    0%, 100% { background-position: 0% 50%; }
+    50% { background-position: 100% 50%; }
+}
+
+.pageSubtitle {
+    font-size: 1.2rem;
+    color: #b0b0b0;
+    margin: 0;
+    line-height: 1.6;
+    font-weight: 400;
+}
+
+/* Animated Background */
+.animatedBg {
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    overflow: hidden;
+    z-index: 1;
+}
+
+.gradientOrb1,
+.gradientOrb2 {
+    position: absolute;
+    border-radius: 50%;
+    filter: blur(80px);
+    opacity: 0.3;
+    animation: float 6s ease-in-out infinite;
+}
+
+.gradientOrb1 {
+    width: 300px;
+    height: 300px;
+    background: linear-gradient(135deg, #8a2be2, #ff6b6b);
+    top: 10%;
+    left: -10%;
+    animation-delay: 0s;
+}
+
+.gradientOrb2 {
+    width: 250px;
+    height: 250px;
+    background: linear-gradient(135deg, #4ecdc4, #44a08d);
+    top: 60%;
+    right: -10%;
+    animation-delay: 3s;
+}
+
+@keyframes float {
+    0%, 100% { transform: translateY(0px) rotate(0deg); }
+    50% { transform: translateY(-20px) rotate(180deg); }
+}
+
+/* Toggle Section */
+.toggleSection {
+    display: flex;
+    justify-content: center;
+    padding: 0 2rem 3rem;
+    position: relative;
+    z-index: 2;
+}
+
+/* Reviews Container */
+.reviewsContainer {
+    position: relative;
+    z-index: 2;
+    padding: 0 2rem 4rem;
+}
+
+.reviewsSections {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(500px, 1fr));
+    gap: 3rem;
+    max-width: 1400px;
+    margin: 0 auto;
+}
+
+/* Error Message */
+.errorMessage {
+    background: rgba(255, 107, 107, 0.1);
+    border: 1px solid rgba(255, 107, 107, 0.3);
+    border-radius: 15px;
+    padding: 1rem 1.5rem;
+    margin: 0 0 2rem 0;
+    text-align: center;
+    backdrop-filter: blur(10px);
+}
+
+.errorMessage p {
+    color: #ff6b6b;
+    margin: 0;
+    font-weight: 500;
+}
+
+/* Responsive Design */
+@media (max-width: 1200px) {
+    .reviewsSections {
+        grid-template-columns: 1fr;
+        gap: 2rem;
+    }
+}
+
+@media (max-width: 768px) {
+    .reviewsHeader {
+        padding: 6rem 1rem 3rem;
+    }
+    
+    .pageTitle {
+        font-size: 2.5rem;
+    }
+    
+    .pageSubtitle {
+        font-size: 1rem;
+    }
+    
+    .reviewsContainer {
+        padding: 0 1rem 3rem;
+    }
+    
+    .reviewsSections {
+        grid-template-columns: 1fr;
+        gap: 1.5rem;
+    }
+    
+    .gradientOrb1,
+    .gradientOrb2 {
+        display: none;
+    }
+}
+
+@media (max-width: 480px) {
+    .reviewsHeader {
+        padding: 5rem 1rem 2rem;
+    }
+    
+    .pageTitle {
+        font-size: 2rem;
+    }
+    
+    .toggleSection {
+        padding: 0 1rem 2rem;
+    }
 }
