@@ -5,9 +5,22 @@ const mode = process.env.NODE_ENV || 'development';
 
 module.exports = {
   entry: "./src/index.js",
+  mode: mode,
   output: {
     path: path.resolve(__dirname, "./static/frontend"),
     filename: "[name].js",
+  },
+  devServer: {
+    static: {
+      directory: path.resolve(__dirname, "./static/frontend"),
+    },
+    hot: true,
+    liveReload: true,
+    watchFiles: ['src/**/*'],
+  },
+  watchOptions: {
+    poll: 1000,
+    ignored: /node_modules/,
   },
   module: {
     rules: [

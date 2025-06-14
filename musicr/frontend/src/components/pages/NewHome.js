@@ -8,13 +8,16 @@ function NewHome() {    const [searchQuery, setSearchQuery] = useState('');
     const [selectedArtist, setSelectedArtist] = useState(null);
     const [isLoading, setIsLoading] = useState(false);
     const [showResults, setShowResults] = useState(false);    const [selectedAlbum, setSelectedAlbum] = useState(null);
-    const [showAlbumModal, setShowAlbumModal] = useState(false);    const [playlists, setPlaylists] = useState([]);    const [showPlaylistDropdown, setShowPlaylistDropdown] = useState(null);
+    const [showAlbumModal, setShowAlbumModal] = useState(false);    const [playlists, setPlaylists] = useState([]);
+    const [showPlaylistDropdown, setShowPlaylistDropdown] = useState(null);
     const [dropdownPosition, setDropdownPosition] = useState({ top: 0, left: 0 });
-    const [successMessage, setSuccessMessage] = useState('');
-    const [showReviewModal, setShowReviewModal] = useState(false);
-    const [reviewRating, setReviewRating] = useState(0);
+    const [successMessage, setSuccessMessage] = useState('');    const [showReviewModal, setShowReviewModal] = useState(false);    const [reviewRating, setReviewRating] = useState(0);
     const [reviewText, setReviewText] = useState('');
-    const searchRef = useRef(null);useEffect(() => {
+    const [hoverRating, setHoverRating] = useState(0);
+    
+    // Refs
+    const searchRef = useRef(null);
+    const artistSectionRef = useRef(null);useEffect(() => {
         const handleClickOutside = (event) => {
             if (searchRef.current && !searchRef.current.contains(event.target)) {
                 setShowResults(false);
@@ -65,9 +68,7 @@ function NewHome() {    const [searchQuery, setSearchQuery] = useState('');
         } finally {
             setIsLoading(false);
         }
-    };
-
-    const handleSelectArtist = async (artist) => {
+    };    const handleSelectArtist = async (artist) => {
         setSearchQuery(artist.name);
         setShowResults(false);
         setIsLoading(true);
@@ -75,6 +76,17 @@ function NewHome() {    const [searchQuery, setSearchQuery] = useState('');
         try {
             const response = await axios.get(`/spotify/get-artist-info/${artist.id}/`);
             setSelectedArtist(response.data);
+              // Scroll suave para a seção do artista após carregar os dados
+            setTimeout(() => {
+                if (artistSectionRef.current) {
+                    const offsetTop = artistSectionRef.current.offsetTop - 120; // 120px de margem do topo
+                    window.scrollTo({
+                        top: offsetTop,
+                        behavior: 'smooth'
+                    });
+                }
+            }, 100); // Pequeno delay para garantir que o DOM foi atualizado
+            
         } catch (error) {
             console.error('Error fetching artist info:', error);
         } finally {
@@ -289,41 +301,52 @@ function NewHome() {    const [searchQuery, setSearchQuery] = useState('');
             alert('Erro ao enviar review. Tente novamente.');
         }
     };    const handleShowPlaylistDropdown = (dropdownId, event, type = 'track') => {
-        const buttonRect = event.currentTarget.getBoundingClientRect();
-        const dropdownWidth = 320;
-        const dropdownHeight = 400;
+        event.preventDefault();
+        event.stopPropagation();
         
-        let left, top;
-        
+        // Para álbuns, calcular posição fixa
         if (type === 'album') {
-            // Para álbuns: direita superior do ícone
-            left = buttonRect.right + 10;
-            top = buttonRect.top;
-        } else {
-            // Para músicas: esquerda inferior do ícone
-            left = buttonRect.left - dropdownWidth - 10;
-            top = buttonRect.bottom + 5;
+            const buttonRect = event.currentTarget.getBoundingClientRect();
+            const dropdownWidth = 320;
+            
+            let left = buttonRect.right + 10; // À direita do botão
+            let top = buttonRect.top;
+            
+            // Verificar se sai da tela pela direita
+            if (left + dropdownWidth > window.innerWidth - 10) {
+                left = buttonRect.left - dropdownWidth - 10; // Move para a esquerda
+            }
+            
+            // Verificar se sai da tela por baixo
+            if (top + 350 > window.innerHeight - 10) {
+                top = window.innerHeight - 350 - 10;
+            }
+            
+            setDropdownPosition({ top, left });
         }
         
-        // Verificações para não sair da tela
-        if (left < 10) {
-            left = 10;
-        }
-        if (left + dropdownWidth > window.innerWidth - 10) {
-            left = window.innerWidth - dropdownWidth - 10;
-        }
-        
-        if (top + dropdownHeight > window.innerHeight - 10) {
-            top = window.innerHeight - dropdownHeight - 10;
-        }
-        if (top < 10) {
-            top = 10;
-        }
-        
-        const position = { top, left };
-        
-        setDropdownPosition(position);
+        // Toggle do dropdown
         setShowPlaylistDropdown(showPlaylistDropdown === dropdownId ? null : dropdownId);
+    };
+
+    // Função para lidar com rating de meio-estrela
+    const handleStarClick = (rating) => {
+        setReviewRating(rating);
+    };
+
+    const handleStarMouseEnter = (rating) => {
+        setHoverRating(rating);
+    };
+
+    const handleStarMouseLeave = () => {
+        setHoverRating(0);
+    };
+
+    // Função para determinar se uma estrela deve estar ativa
+    const getStarState = (starIndex, half = false) => {
+        const currentRating = hoverRating || reviewRating;
+        const starValue = half ? starIndex - 0.5 : starIndex;
+        return currentRating >= starValue;
     };return (
         <div className="new-home">
             {/* Modern Header */}
@@ -428,12 +451,10 @@ function NewHome() {    const [searchQuery, setSearchQuery] = useState('');
                         )}
                     </div>
                 </div>
-            </section>
-
-            {/* Selected Artist Display */}
+            </section>            {/* Selected Artist Display */}
             {selectedArtist && (
-                <section className="artist-display">
-                    <div className="artist-card">                        <div className="artist-header">
+                <section className="artist-display" ref={artistSectionRef}>
+                    <div className="artist-card"><div className="artist-header">
                             <div className="artist-image">
                                 {selectedArtist.image_url ? (
                                     <img src={selectedArtist.image_url} alt={selectedArtist.name} />
@@ -485,10 +506,9 @@ function NewHome() {    const [searchQuery, setSearchQuery] = useState('');
                         <div className="albums-section">
                             <h3 className="albums-title">Albums</h3>
                             <div className="albums-grid">
-                                {selectedArtist.albums.map((album) => (
-                                    <div 
+                                {selectedArtist.albums.map((album) => (                                    <div 
                                         key={album.album_id} 
-                                        className="album-card"
+                                        className={`album-card ${showPlaylistDropdown === `album_${album.album_id}` ? 'dropdown-active' : ''}`}
                                         onClick={() => handleAlbumClick(album)}
                                         role="button"
                                         tabIndex={0}
@@ -529,26 +549,27 @@ function NewHome() {    const [searchQuery, setSearchQuery] = useState('');
                                                 <span className="rating-text">
                                                     {album.average_rating ? album.average_rating.toFixed(1) : '0.0'}
                                                 </span>
-                                            </div>
-                                            <div className="album-actions">                                                <button 
-                                                    className="album-playlist-btn"
-                                                    onClick={(e) => {
-                                                        e.stopPropagation();
-                                                        handleShowPlaylistDropdown(`album_${album.album_id}`, e, 'album');
-                                                    }}
-                                                >
-                                                    <svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
-                                                        <path d="M19 21L12 16L5 21V5C5 4.46957 5.21071 3.96086 5.58579 3.58579C5.96086 3.21071 6.46957 3 7 3H17C17.5304 3 18.0391 3.21071 18.4142 3.58579C18.7893 3.96086 19 4.46957 19 5V21Z" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/>
-                                                    </svg>
-                                                    Add Album
-                                                </button>                                                {showPlaylistDropdown === `album_${album.album_id}` && (
-                                                    <div 
-                                                        className="playlist-dropdown album-dropdown"
-                                                        style={{
-                                                            top: `${dropdownPosition.top}px`,
-                                                            left: `${dropdownPosition.left}px`
+                                            </div>                                            <div className="album-actions">
+                                                <div className="playlist-dropdown-container">
+                                                    <button 
+                                                        className="album-playlist-btn"
+                                                        onClick={(e) => {
+                                                            e.stopPropagation();
+                                                            handleShowPlaylistDropdown(`album_${album.album_id}`, e, 'album');
                                                         }}
-                                                    ><div className="dropdown-header">
+                                                    >
+                                                        <svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                                                            <path d="M19 21L12 16L5 21V5C5 4.46957 5.21071 3.96086 5.58579 3.58579C5.96086 3.21071 6.46957 3 7 3H17C17.5304 3 18.0391 3.21071 18.4142 3.58579C18.7893 3.96086 19 4.46957 19 5V21Z" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/>
+                                                        </svg>
+                                                        Add Album
+                                                    </button>                                                    {showPlaylistDropdown === `album_${album.album_id}` && (
+                                                        <div 
+                                                            className="playlist-dropdown album-dropdown"
+                                                            style={{
+                                                                top: `${dropdownPosition.top}px`,
+                                                                left: `${dropdownPosition.left}px`
+                                                            }}
+                                                        ><div className="dropdown-header">
                                                                 <span>Adicionar álbum à playlist</span>
                                                                 <button 
                                                                     className="dropdown-close"
@@ -581,11 +602,12 @@ function NewHome() {    const [searchQuery, setSearchQuery] = useState('');
                                                                         <span>Nenhuma playlist encontrada</span>
                                                                         <Link to="/playlist/create" className="create-playlist-link">
                                                                             Criar primeira playlist
-                                                                        </Link>
-                                                                    </div>
+                                                                        </Link>                                                                    </div>
                                                                 )}
-                                                            </div>                                                        </div>
-                                                )}
+                                                            </div>
+                                                        </div>
+                                                    )}
+                                                </div>
                                             </div>
                                         </div>
                                     </div>
@@ -672,13 +694,7 @@ function NewHome() {    const [searchQuery, setSearchQuery] = useState('');
                                                             <path d="M12 6V18M6 12H18" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/>
                                                         </svg>
                                                     </button>                                                    {showPlaylistDropdown === track.track_id && (
-                                                        <div 
-                                                            className="playlist-dropdown track-dropdown"
-                                                            style={{
-                                                                top: `${dropdownPosition.top}px`,
-                                                                left: `${dropdownPosition.left}px`
-                                                            }}
-                                                        ><div className="dropdown-header">
+                                                        <div className="playlist-dropdown track-dropdown"><div className="dropdown-header">
                                                                     <span>Adicionar à playlist</span>
                                                                     <button 
                                                                         className="dropdown-close"
@@ -753,17 +769,37 @@ function NewHome() {    const [searchQuery, setSearchQuery] = useState('');
                             
                             <form className="review-form" onSubmit={handleSubmitReview}>
                                 <div className="form-group">
-                                    <label htmlFor="rating">Rating</label>                                    <div className="rating-input">
+                                    <label htmlFor="rating">Rating</label>                                    <div className="rating-input" onMouseLeave={handleStarMouseLeave}>
                                         {[1, 2, 3, 4, 5].map((star) => (
-                                            <button
-                                                key={star}
-                                                type="button"
-                                                className={`star-btn ${reviewRating >= star ? 'active' : ''}`}
-                                                onClick={() => setReviewRating(star)}
-                                            >
-                                                ★
-                                            </button>
+                                            <div key={star} className="star-wrapper">
+                                                {/* Área clicável para meia estrela */}
+                                                <button
+                                                    type="button"
+                                                    className="star-half-btn left"
+                                                    onClick={() => handleStarClick(star - 0.5)}
+                                                    onMouseEnter={() => handleStarMouseEnter(star - 0.5)}
+                                                ></button>
+                                                {/* Área clicável para estrela completa */}
+                                                <button
+                                                    type="button"
+                                                    className="star-half-btn right"
+                                                    onClick={() => handleStarClick(star)}
+                                                    onMouseEnter={() => handleStarMouseEnter(star)}
+                                                ></button>
+                                                {/* Estrela visual */}
+                                                <span 
+                                                    className={`star-visual ${
+                                                        getStarState(star) ? 'full' : 
+                                                        getStarState(star, true) ? 'half' : 'empty'
+                                                    }`}
+                                                >
+                                                    ★
+                                                </span>
+                                            </div>
                                         ))}
+                                        <div className="rating-value">
+                                            {(hoverRating || reviewRating || 0).toFixed(1)} / 5
+                                        </div>
                                     </div>
                                 </div>
                                   <div className="form-group">

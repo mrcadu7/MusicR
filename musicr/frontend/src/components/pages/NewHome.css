@@ -588,6 +588,7 @@
 .albums-section {
     margin-top: 3rem;
     padding: 0 2rem;
+    overflow: visible;
 }
 
 .albums-title {
@@ -608,6 +609,7 @@
     gap: 2rem;
     max-width: 1200px;
     margin: 0 auto;
+    overflow: visible;
 }
 
 .album-card {
@@ -619,6 +621,8 @@
     cursor: pointer;
     transition: all 0.3s ease;
     animation: fadeInUp 0.6s ease;
+    overflow: visible;
+    position: relative;
 }
 
 .album-card:hover {
@@ -1016,10 +1020,11 @@
 /* Playlist Dropdown */
 .playlist-dropdown-container {
     position: relative;
+    display: inline-block;
 }
 
 .playlist-dropdown {
-    position: fixed;
+    position: absolute;
     background: rgba(20, 20, 20, 0.95);
     backdrop-filter: blur(20px);
     border: 1px solid rgba(138, 43, 226, 0.3);
@@ -1028,39 +1033,48 @@
     max-width: 320px;
     max-height: 350px;
     overflow-y: auto;
-    z-index: 3500;
+    z-index: 9999;
     box-shadow: 0 8px 32px rgba(0, 0, 0, 0.6);
 }
 
-/* Animação para álbuns (direita superior) */
+/* Dropdown para álbuns - abre para a direita */
 .album-dropdown {
-    animation: slideInFromTopRight 0.3s ease;
+    position: fixed !important;
+    left: auto !important;
+    top: auto !important;
+    right: auto !important;
+    bottom: auto !important;
+    margin-left: 0;
+    animation: slideInFromRight 0.2s ease;
+    z-index: 99999 !important;
 }
 
-@keyframes slideInFromTopRight {
-    from {
-        opacity: 0;
-        transform: scale(0.95) translateX(-10px) translateY(10px);
-    }
-    to {
-        opacity: 1;
-        transform: scale(1) translateX(0) translateY(0);
-    }
-}
-
-/* Animação para tracks (esquerda inferior) */
+/* Dropdown para músicas - abre para a esquerda */
 .track-dropdown {
-    animation: slideInFromBottomLeft 0.3s ease;
+    right: 100%;
+    top: 0;
+    margin-right: 10px;
+    animation: slideInFromLeft 0.2s ease;
 }
 
-@keyframes slideInFromBottomLeft {
+@keyframes slideInFromRight {
     from {
         opacity: 0;
-        transform: scale(0.95) translateX(10px) translateY(-10px);
+        transform: translateX(-10px) scale(0.95);
     }
     to {
         opacity: 1;
-        transform: scale(1) translateX(0) translateY(0);
+        transform: translateX(0) scale(1);
+    }
+}
+
+@keyframes slideInFromLeft {
+    from {
+        opacity: 0;
+        transform: translateX(10px) scale(0.95);
+    }
+    to {
+        opacity: 1;        transform: translateX(0) scale(1);
     }
 }
 
@@ -1227,196 +1241,120 @@
     height: 16px;
 }
 
-/* Responsive adjustments for playlist dropdown */
-@media (max-width: 768px) {
-    .playlist-dropdown {
-        min-width: 280px;
-        max-width: calc(100vw - 40px);
-        max-height: 60vh;
-    }
-}
-
-@media (max-width: 480px) {
-    .playlist-dropdown {
-        min-width: 250px;
-        max-width: calc(100vw - 20px);
-        max-height: 50vh;
-    }
-}
-
-/* Review Modal */
-.review-modal-overlay {
-    position: fixed;
-    top: 0;
-    left: 0;
-    right: 0;
-    bottom: 0;
-    background: rgba(0, 0, 0, 0.8);
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    z-index: 3000;
-    backdrop-filter: blur(10px);
-}
-
-.review-modal {
-    background: rgba(20, 20, 20, 0.95);
-    backdrop-filter: blur(20px);
-    border: 1px solid rgba(138, 43, 226, 0.3);
-    border-radius: 20px;
-    width: 90%;
-    max-width: 500px;
-    max-height: 80vh;
-    overflow-y: auto;
+/* Sistema de Rating com Meio-Estrelas */
+.star-wrapper {
     position: relative;
-    animation: modalSlideIn 0.3s ease;
+    display: inline-block;
+    font-size: 2rem;
+    width: 1.2em;
+    height: 1.2em;
+    margin-right: 2px;
 }
 
-@keyframes modalSlideIn {
-    from {
-        opacity: 0;
-        transform: scale(0.9) translateY(20px);
-    }
-    to {
-        opacity: 1;
-        transform: scale(1) translateY(0);
-    }
-}
-
-.review-modal-content {
-    padding: 2rem;
-    color: #ffffff;
-}
-
-.review-header {
-    margin-bottom: 2rem;
-}
-
-.artist-info-review {
-    display: flex;
-    align-items: center;
-    gap: 1rem;
-}
-
-.artist-image-small {
-    width: 60px;
-    height: 60px;
-    border-radius: 50%;
-    object-fit: cover;
-}
-
-.artist-info-review h3 {
-    margin: 0;
-    font-size: 1.25rem;
-    font-weight: 700;
-    color: #8a2be2;
-}
-
-.artist-info-review p {
-    margin: 0.25rem 0 0 0;
-    color: #b0b0b0;
-    font-size: 0.9rem;
-}
-
-.review-form {
-    display: flex;
-    flex-direction: column;
-    gap: 1.5rem;
-}
-
-.form-group {
-    display: flex;
-    flex-direction: column;
-    gap: 0.5rem;
-}
-
-.form-group label {
-    font-weight: 600;
-    color: #8a2be2;
-    font-size: 0.9rem;
-    text-transform: uppercase;
-    letter-spacing: 0.5px;
-}
-
-.rating-input {
-    display: flex;
-    gap: 0.25rem;
-}
-
-.star-btn {
-    background: none;
+/* Botões invisíveis para capturar cliques */
+.star-half-btn {
+    position: absolute;
+    top: 0;
+    width: 50%;
+    height: 100%;
+    background: transparent;
     border: none;
-    font-size: 1.5rem;
-    color: #666;
     cursor: pointer;
-    transition: all 0.2s ease;
+    z-index: 10;
 }
 
-.star-btn:hover,
-.star-btn.active {
+.star-half-btn.left {
+    left: 0;
+}
+
+.star-half-btn.right {
+    right: 0;
+}
+
+/* Estrela visual base (cinza) */
+.star-visual {
+    position: relative;
+    font-size: 2rem;
+    color: #444;
+    pointer-events: none;
+    user-select: none;
+}
+
+/* Estrela completa dourada */
+.star-visual.full {
     color: #ffd700;
+}
+
+/* Meia estrela - clipping da metade esquerda */
+.star-visual.half {
+    color: #444; /* Base cinza */
+}
+
+.star-visual.half::before {
+    content: '★';
+    position: absolute;
+    left: 0;
+    top: 0;
+    width: 50%;
+    overflow: hidden;
+    color: #ffd700;
+    z-index: 2;
+}
+
+/* Custom Scrollbars */
+::-webkit-scrollbar {
+    width: 8px;
+    height: 8px;
+}
+
+::-webkit-scrollbar-track {
+    background: rgba(255, 255, 255, 0.1);
+    border-radius: 10px;
+}
+
+::-webkit-scrollbar-thumb {
+    background: linear-gradient(135deg, #8a2be2, #663399);
+    border-radius: 10px;
+    transition: all 0.3s ease;
+}
+
+::-webkit-scrollbar-thumb:hover {
+    background: linear-gradient(135deg, #9d3df5, #7a47a3);
     transform: scale(1.1);
 }
 
-.review-textarea {
-    background: rgba(40, 40, 40, 0.8);
-    border: 1px solid rgba(138, 43, 226, 0.3);
-    border-radius: 10px;
-    padding: 1rem;
-    color: #ffffff;
-    font-family: inherit;
-    font-size: 0.9rem;
-    line-height: 1.5;
-    resize: vertical;
-    min-height: 120px;
-    transition: all 0.3s ease;
+::-webkit-scrollbar-corner {
+    background: rgba(255, 255, 255, 0.1);
 }
 
-.review-textarea:focus {
-    outline: none;
-    border-color: #8a2be2;
-    box-shadow: 0 0 0 2px rgba(138, 43, 226, 0.2);
+/* Firefox scrollbar */
+* {
+    scrollbar-width: thin;
+    scrollbar-color: #8a2be2 rgba(255, 255, 255, 0.1);
 }
 
-.review-textarea::placeholder {
-    color: #888;
+/* Scrollbar específico para elementos com overflow */
+.playlist-dropdown::-webkit-scrollbar,
+.modal-content::-webkit-scrollbar,
+.review-modal::-webkit-scrollbar,
+.search-results::-webkit-scrollbar {
+    width: 6px;
 }
 
-.form-actions {
-    display: flex;
-    gap: 1rem;
-    justify-content: flex-end;
-    margin-top: 1rem;
+.playlist-dropdown::-webkit-scrollbar-thumb,
+.modal-content::-webkit-scrollbar-thumb,
+.review-modal::-webkit-scrollbar-thumb,
+.search-results::-webkit-scrollbar-thumb {
+    background: linear-gradient(135deg, #8a2be2, #663399);
+    border-radius: 6px;
 }
 
-.btn-cancel,
-.btn-submit {
-    padding: 0.75rem 1.5rem;
-    border: none;
-    border-radius: 25px;
-    font-weight: 600;
-    cursor: pointer;
-    transition: all 0.3s ease;
-}
-
-.btn-cancel {
-    background: rgba(60, 60, 60, 0.8);
-    color: #ffffff;
-}
-
-.btn-cancel:hover {
-    background: rgba(80, 80, 80, 0.8);
-}
-
-.btn-submit {
-    background: linear-gradient(135deg, #8a2be2, #9370db);
-    color: #ffffff;
-}
-
-.btn-submit:hover {
-    background: linear-gradient(135deg, #9370db, #ba55d3);
-    transform: translateY(-2px);
-    box-shadow: 0 4px 15px rgba(138, 43, 226, 0.4);
+.playlist-dropdown::-webkit-scrollbar-track,
+.modal-content::-webkit-scrollbar-track,
+.review-modal::-webkit-scrollbar-track,
+.search-results::-webkit-scrollbar-track {
+    background: rgba(0, 0, 0, 0.2);
+    border-radius: 6px;
 }
 
 /* Responsive Design */
