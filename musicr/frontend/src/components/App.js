@@ -1,7 +1,7 @@
 import React from 'react';
 import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
 import { createRoot } from 'react-dom/client';
-import Home from './pages/Home';
+import NewHome from './pages/NewHome';
 import Playlists from './pages/Playlists';
 import PlaylistDetailsPage from './pages/PlaylistDetailsPage';
 import PlaylistCreate from './pages/PlaylistCreate';
@@ -14,17 +14,45 @@ import Reviews from './pages/Reviews';
 function App() {
   return (
     <Router>
-      <Navbar/>
-      <Container customClass="min-height">
-        <Routes>
-          <Route path="/" element={<Home/>} />
-          <Route path="/playlist" element={<Playlists/>} />
-          <Route path="/playlist/:playlistId" element={<PlaylistDetailsPage />} />
-          <Route path="/playlist/create" element={<PlaylistCreate />} />
-          <Route path='/reviews' element={<Reviews />} />
-        </Routes>
-      </Container>
-      <Footer/>
+      <Routes>
+        <Route path="/" element={<NewHome/>} />
+        <Route path="/playlist" element={
+          <>
+            <Navbar/>
+            <Container customClass="min-height">
+              <Playlists/>
+            </Container>
+            <Footer/>
+          </>
+        } />
+        <Route path="/playlist/:playlistId" element={
+          <>
+            <Navbar/>
+            <Container customClass="min-height">
+              <PlaylistDetailsPage />
+            </Container>
+            <Footer/>
+          </>
+        } />
+        <Route path="/playlist/create" element={
+          <>
+            <Navbar/>
+            <Container customClass="min-height">
+              <PlaylistCreate />
+            </Container>
+            <Footer/>
+          </>
+        } />
+        <Route path='/reviews' element={
+          <>
+            <Navbar/>
+            <Container customClass="min-height">
+              <Reviews />
+            </Container>
+            <Footer/>
+          </>
+        } />
+      </Routes>
     </Router>
   );
 }
