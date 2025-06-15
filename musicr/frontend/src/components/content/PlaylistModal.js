@@ -16,11 +16,9 @@ function PlaylistModal({ playlist, onClose }) {
     }, [playlist]);
 
     const fetchPlaylistDetails = async () => {
-        try {
-            setLoading(true);
+        try {            setLoading(true);
             const response = await axios.get(`/playlists/playlists/view/${playlist.id}/`);
             setPlaylistDetails(response.data);
-            console.log('Playlist details:', response.data);
         } catch (error) {
             console.error('Error fetching playlist details:', error);
             setError('Erro ao carregar detalhes da playlist');

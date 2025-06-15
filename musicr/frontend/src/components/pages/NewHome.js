@@ -2,6 +2,7 @@ import React, { useState, useRef, useEffect } from 'react';
 import { Link } from 'react-router-dom';
 import axios from 'axios';
 import CreatePlaylistModal from '../content/CreatePlaylistModal';
+import SharedNavbar from '../layout/SharedNavbar';
 import './NewHome.css';
 
 function NewHome() {    const [searchQuery, setSearchQuery] = useState('');
@@ -11,8 +12,7 @@ function NewHome() {    const [searchQuery, setSearchQuery] = useState('');
     const [showResults, setShowResults] = useState(false);    const [selectedAlbum, setSelectedAlbum] = useState(null);
     const [showAlbumModal, setShowAlbumModal] = useState(false);    const [playlists, setPlaylists] = useState([]);
     const [showPlaylistDropdown, setShowPlaylistDropdown] = useState(null);
-    const [dropdownPosition, setDropdownPosition] = useState({ top: 0, left: 0 });
-    const [successMessage, setSuccessMessage] = useState('');    const [showReviewModal, setShowReviewModal] = useState(false);
+    const [successMessage, setSuccessMessage] = useState('');const [showReviewModal, setShowReviewModal] = useState(false);
     const [showCreatePlaylistModal, setShowCreatePlaylistModal] = useState(false);    const [reviewRating, setReviewRating] = useState(0);
     const [reviewText, setReviewText] = useState('');
     const [hoverRating, setHoverRating] = useState(0);
@@ -319,29 +319,9 @@ function NewHome() {    const [searchQuery, setSearchQuery] = useState('');
         event.preventDefault();
         event.stopPropagation();
         
-        // Para álbuns, calcular posição fixa
-        if (type === 'album') {
-            const buttonRect = event.currentTarget.getBoundingClientRect();
-            const dropdownWidth = 320;
-            
-            let left = buttonRect.right + 10; // À direita do botão
-            let top = buttonRect.top;
-            
-            // Verificar se sai da tela pela direita
-            if (left + dropdownWidth > window.innerWidth - 10) {
-                left = buttonRect.left - dropdownWidth - 10; // Move para a esquerda
-            }
-            
-            // Verificar se sai da tela por baixo
-            if (top + 350 > window.innerHeight - 10) {
-                top = window.innerHeight - 350 - 10;
-            }
-            
-            setDropdownPosition({ top, left });
-        }
-        
         // Toggle do dropdown
-        setShowPlaylistDropdown(showPlaylistDropdown === dropdownId ? null : dropdownId);
+        const newDropdownId = showPlaylistDropdown === dropdownId ? null : dropdownId;
+        setShowPlaylistDropdown(newDropdownId);
     };
 
     // Função para lidar com rating de meio-estrela
@@ -363,20 +343,11 @@ function NewHome() {    const [searchQuery, setSearchQuery] = useState('');
         const starValue = half ? starIndex - 0.5 : starIndex;
         return currentRating >= starValue;
     };return (
-        <div className="new-home">
-            {/* Modern Header */}
-            <header className="modern-header">
-                <div className="header-content">
-                    <Link to="/" className="logo">
-                        <span className="logo-text">MusicR</span>
-                    </Link>
-                    <nav className="nav-links">
-                        <Link to="/playlist" className="nav-link">Playlists</Link>
-                        <Link to="/reviews" className="nav-link">Reviews</Link>
-                        <button onClick={handleCreatePlaylist} className="nav-link create-btn">Create Playlist</button>
-                    </nav>
-                </div>
-            </header>
+        <div className="new-home">            {/* Shared Navbar */}
+            <SharedNavbar 
+                activeRoute="home" 
+                onCreatePlaylist={handleCreatePlaylist}
+            />
 
             {/* Animated Background */}
             <div className="animated-bg">
@@ -565,8 +536,7 @@ function NewHome() {    const [searchQuery, setSearchQuery] = useState('');
                                                     {album.average_rating ? album.average_rating.toFixed(1) : '0.0'}
                                                 </span>
                                             </div>                                            <div className="album-actions">
-                                                <div className="playlist-dropdown-container">
-                                                    <button 
+                                                <div className="playlist-dropdown-container">                                                    <button 
                                                         className="album-playlist-btn"
                                                         onClick={(e) => {
                                                             e.stopPropagation();
@@ -576,15 +546,9 @@ function NewHome() {    const [searchQuery, setSearchQuery] = useState('');
                                                         <svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
                                                             <path d="M19 21L12 16L5 21V5C5 4.46957 5.21071 3.96086 5.58579 3.58579C5.96086 3.21071 6.46957 3 7 3H17C17.5304 3 18.0391 3.21071 18.4142 3.58579C18.7893 3.96086 19 4.46957 19 5V21Z" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/>
                                                         </svg>
-                                                        Add Album
-                                                    </button>                                                    {showPlaylistDropdown === `album_${album.album_id}` && (
-                                                        <div 
-                                                            className="playlist-dropdown album-dropdown"
-                                                            style={{
-                                                                top: `${dropdownPosition.top}px`,
-                                                                left: `${dropdownPosition.left}px`
-                                                            }}
-                                                        ><div className="dropdown-header">
+                                                        Add Album                                                    </button>                                                    {showPlaylistDropdown === `album_${album.album_id}` && (
+                                                        <div className="playlist-dropdown album-dropdown">
+                                                            <div className="dropdown-header">
                                                                 <span>Adicionar álbum à playlist</span>
                                                                 <button 
                                                                     className="dropdown-close"
@@ -612,16 +576,17 @@ function NewHome() {    const [searchQuery, setSearchQuery] = useState('');
                                                                             <span className="playlist-count">{playlist.song_count || 0} músicas</span>
                                                                         </button>
                                                                     ))
-                                                                ) : (                                                                    <div className="no-playlists">
+                                                                ) : (
+                                                                    <div className="no-playlists">
                                                                         <span>Nenhuma playlist encontrada</span>
                                                                         <button onClick={handleCreatePlaylist} className="create-playlist-link">
                                                                             Criar primeira playlist
-                                                                        </button>                                                                    </div>
+                                                                        </button>
+                                                                    </div>
                                                                 )}
                                                             </div>
                                                         </div>
-                                                    )}
-                                                </div>
+                                                    )}</div>
                                             </div>
                                         </div>
                                     </div>
@@ -699,8 +664,7 @@ function NewHome() {    const [searchQuery, setSearchQuery] = useState('');
                                                             ★
                                                         </span>
                                                     ))}
-                                                </div>
-                                                <div className="playlist-dropdown-container">                                                    <button 
+                                                </div>                                                <div className="playlist-dropdown-container">                                                    <button 
                                                         className="add-to-playlist-btn"
                                                         onClick={(e) => handleShowPlaylistDropdown(track.track_id, e, 'track')}
                                                     >
@@ -708,42 +672,45 @@ function NewHome() {    const [searchQuery, setSearchQuery] = useState('');
                                                             <path d="M12 6V18M6 12H18" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/>
                                                         </svg>
                                                     </button>                                                    {showPlaylistDropdown === track.track_id && (
-                                                        <div className="playlist-dropdown track-dropdown"><div className="dropdown-header">
-                                                                    <span>Adicionar à playlist</span>
-                                                                    <button 
-                                                                        className="dropdown-close"
-                                                                        onClick={() => setShowPlaylistDropdown(null)}
-                                                                    >
-                                                                        <svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
-                                                                            <path d="M18 6L6 18M6 6L18 18" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/>
-                                                                        </svg>
-                                                                    </button>
-                                                                </div>
-                                                                <div className="playlist-list">
-                                                                    {playlists.results?.length > 0 ? (
-                                                                        playlists.results.map((playlist) => (
-                                                                            <button
-                                                                                key={playlist.id}
-                                                                                className="playlist-item"
-                                                                                onClick={() => handleAddToPlaylist(track, playlist.id)}
-                                                                            >
-                                                                                <div className="playlist-icon">
-                                                                                    <svg viewBox="0 0 24 24" fill="currentColor">
-                                                                                        <path d="M12 3v10.55c-.59-.34-1.27-.55-2-.55-2.21 0-4 1.79-4 4s1.79 4 4 4 4-1.79 4-4V7h4V3h-6z"/>
-                                                                                    </svg>
-                                                                                </div>
-                                                                                <span className="playlist-name">{playlist.title}</span>
-                                                                                <span className="playlist-count">{playlist.song_count || 0} músicas</span>
-                                                                            </button>
-                                                                        ))
-                                                                    ) : (                                                                        <div className="no-playlists">
-                                                                            <span>Nenhuma playlist encontrada</span>
-                                                                            <button onClick={handleCreatePlaylist} className="create-playlist-link">
-                                                                                Criar primeira playlist
-                                                                            </button>                                                                        </div>
-                                                                    )}
-                                                                </div>
+                                                        <div className="playlist-dropdown track-dropdown">
+                                                            <div className="dropdown-header">
+                                                                <span>Adicionar à playlist</span>
+                                                                <button 
+                                                                    className="dropdown-close"
+                                                                    onClick={() => setShowPlaylistDropdown(null)}
+                                                                >
+                                                                    <svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                                                                        <path d="M18 6L6 18M6 6L18 18" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/>
+                                                                    </svg>
+                                                                </button>
                                                             </div>
+                                                            <div className="playlist-list">
+                                                                {playlists.results?.length > 0 ? (
+                                                                    playlists.results.map((playlist) => (
+                                                                        <button
+                                                                            key={playlist.id}
+                                                                            className="playlist-item"
+                                                                            onClick={() => handleAddToPlaylist(track, playlist.id)}
+                                                                        >
+                                                                            <div className="playlist-icon">
+                                                                                <svg viewBox="0 0 24 24" fill="currentColor">
+                                                                                    <path d="M12 3v10.55c-.59-.34-1.27-.55-2-.55-2.21 0-4 1.79-4 4s1.79 4 4 4 4-1.79 4-4V7h4V3h-6z"/>
+                                                                                </svg>
+                                                                            </div>
+                                                                            <span className="playlist-name">{playlist.title}</span>
+                                                                            <span className="playlist-count">{playlist.song_count || 0} músicas</span>
+                                                                        </button>
+                                                                    ))
+                                                                ) : (
+                                                                    <div className="no-playlists">
+                                                                        <span>Nenhuma playlist encontrada</span>
+                                                                        <button onClick={handleCreatePlaylist} className="create-playlist-link">
+                                                                            Criar primeira playlist
+                                                                        </button>
+                                                                    </div>
+                                                                )}
+                                                            </div>
+                                                        </div>
                                                     )}
                                                 </div>
                                             </div>
@@ -838,9 +805,7 @@ function NewHome() {    const [searchQuery, setSearchQuery] = useState('');
                         </div>
                     </div>
                 </div>
-            )}
-
-            {/* Create Playlist Modal */}
+            )}            {/* Create Playlist Modal */}
             <CreatePlaylistModal
                 isOpen={showCreatePlaylistModal}
                 onClose={handleCloseCreatePlaylistModal}

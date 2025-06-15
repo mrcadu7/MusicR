@@ -46,10 +46,7 @@ function PlaylistsCard({ playlist, onPlaylistClick }) {
         if (playlist.tracks && Array.isArray(playlist.tracks)) return playlist.tracks.length;
         if (playlist.songs && Array.isArray(playlist.songs)) return playlist.songs.length;
         if (playlist.song_details && Array.isArray(playlist.song_details)) return playlist.song_details.length;
-        
-        // Log para debug - vamos ver que propriedades estão disponíveis
-        console.log('Playlist object:', playlist);
-        console.log('Available properties:', Object.keys(playlist));
+          // Log para debug - vamos ver que propriedades estão disponíveis
         
         return 0;
     };

@@ -1,9 +1,9 @@
 import React, { useState, useEffect } from 'react';
-import { Link } from 'react-router-dom';
 import axios from 'axios';
 import PlaylistsCard from "../content/PlaylistsCard";
 import PlaylistModal from "../content/PlaylistModal";
 import CreatePlaylistModal from "../content/CreatePlaylistModal";
+import SharedNavbar from '../layout/SharedNavbar';
 import './Playlists.css';
 
 function Playlists() {
@@ -16,9 +16,7 @@ function Playlists() {
         async function fetchPlaylists() {
             try {
                 setLoading(true);
-                const response = await axios.get('/playlists/playlists/view/all/');
-                console.log(response.data.results);
-                setPlaylists(response.data.results);
+                const response = await axios.get('/playlists/playlists/view/all/');                setPlaylists(response.data.results);
             } catch (error) {
                 console.error('Error fetching playlists:', error);
                 setError('Erro ao carregar playlists. Tente novamente.');
@@ -104,21 +102,12 @@ function Playlists() {
         );
     };
 
-    return (
-        <div className="modern-playlists-page">
-            {/* Modern Header */}
-            <header className="playlists-header">
-                <div className="header-content">
-                    <Link to="/" className="logo">
-                        <span className="logo-text">MusicR</span>
-                    </Link>
-                    <nav className="nav-links">
-                        <Link to="/playlist" className="nav-link active">Playlists</Link>
-                        <Link to="/reviews" className="nav-link">Reviews</Link>
-                        <button onClick={handleCreatePlaylist} className="nav-link create-btn">Create Playlist</button>
-                    </nav>
-                </div>
-            </header>
+    return (        <div className="modern-playlists-page">
+            {/* Shared Navbar */}
+            <SharedNavbar 
+                activeRoute="playlists" 
+                onCreatePlaylist={handleCreatePlaylist}
+            />
 
             {/* Animated Background */}
             <div className="animated-bg">
